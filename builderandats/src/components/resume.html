@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #222;
+      line-height: 1.4;
+      width: 210mm;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+      font-size: 26px;
+    }
+
+    h2 {
+      margin-top: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 4px 0;
+    }
+
+    .section {
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+    }
+
+    .item {
+      margin-bottom: 8px;
+    }
+
+    .flex {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .small {
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <h1>Mohit Kumar</h1>
+  <p>mohit.kumar@email.com</p>
+  <p>+91 9876543210</p>
+
+  <!-- SUMMARY -->
+  <div class="section">
+    <h2>Summary</h2>
+    <p>MERN stack developer with strong problem-solving skills and experience in building scalable web applications.</p>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section">
+    <h2>Experience</h2>
+
+    <div class="item">
+      <div class="flex">
+        <strong>Frontend Developer - ABC Tech</strong>
+        <span class="small">2023 - Present</span>
+      </div>
+      <p>Developed responsive UI components using React and improved performance by 30%.</p>
+    </div>
+
+    <div class="item">
+      <div class="flex">
+        <strong>Intern - XYZ Solutions</strong>
+        <span class="small">2022 - 2023</span>
+      </div>
+      <p>Worked on REST APIs and integrated frontend with backend services.</p>
+    </div>
+
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section">
+    <h2>Projects</h2>
+
+    <div class="item">
+      <strong>Resume Builder</strong>
+      <span class="small">(github.com/mohit/resume-builder)</span>
+      <p>Built a dynamic resume builder with template selection and PDF export.</p>
+    </div>
+
+    <div class="item">
+      <strong>Task Manager App</strong>
+      <span class="small">(github.com/mohit/task-manager)</span>
+      <p>Created a full-stack task manager with authentication and CRUD operations.</p>
+    </div>
+
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section">
+    <h2>Skills</h2>
+    <p>JavaScript, React, Node.js, Express, MongoDB, Data Structures & Algorithms</p>
+  </div>
+
+</body>
+</html>
