@@ -30,7 +30,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <header className="sticky top-0 z-50 w-full border-b border-border bg-white/80 backdrop-blur-md">
-          <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <nav className="w-full  px-10 h-16 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
                 B
@@ -40,14 +40,20 @@ export default function RootLayout({
               </div>
             </div>
             <div className="flex items-center space-x-6 text-sm font-medium">
-              <Link href="/" className="text-foreground/80 hover:text-primary transition-colors">
+              <Link href="/" className="text-foreground/80  hover:text-white p-2 rounded-lg hover:bg-gray-500 transition-colors">
                 Home
               </Link>
               <Link
                 href="/resumeBuilder"
-                className="text-foreground/80 hover:text-primary transition-colors"
+                className="text-foreground/80  hover:text-white p-2 rounded-lg hover:bg-gray-500 transition-colors"
               >
                 Resume Builder
+              </Link>
+              <Link
+                href="/ats"
+                className="text-foreground/80 hover:text-white p-2 rounded-lg hover:bg-gray-500   transition-colors"
+              >
+                Ats Checker
               </Link>
             </div>
           </nav>

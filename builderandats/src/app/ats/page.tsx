@@ -1,18 +1,21 @@
 "use client"
 import React, { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation';
+
 
 const AtsModule = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const [parsedData, setParsedData] = useState<string | null>(null);
+    
     const [error, setError] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
+    const router = useRouter();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             setFileName(e.target.files[0].name);
             setError(null);
-            setParsedData(null);
+            
         }
     };
 
@@ -24,7 +27,7 @@ const AtsModule = () => {
 
         setIsUploading(true);
         setError(null);
-        setParsedData(null);
+        
 
         try {
             const req = await fetch('/Api/parsePdf', {
@@ -36,8 +39,11 @@ const AtsModule = () => {
             });
 
             if (req.ok) {
-                const res = await req.text();
-                setParsedData(res);
+                const res = await req.json();
+                // console.log(res);
+                
+                router.push(`/ats/${res.id}`)
+
             } else {
                 setError("Failed to parse the PDF. Please try again.");
             }
@@ -115,7 +121,7 @@ const AtsModule = () => {
         </div>
 
         {/* Results Area */}
-        {parsedData && (
+        {/* {parsedData && (
             <div className="w-full max-w-4xl mt-12 animate-in fade-in slide-in-from-bottom-8 duration-500">
                 <div className="bg-white border border-border shadow-xl rounded-2xl overflow-hidden">
                     <div className="bg-foreground/5 border-b border-border px-6 py-4 flex items-center gap-2">
@@ -129,7 +135,7 @@ const AtsModule = () => {
                     </div>
                 </div>
             </div>
-        )}
+        )} */}
         
     </div>
   )
