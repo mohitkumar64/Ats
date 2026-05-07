@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import UserProvider from "@/Providers/userProvider";
+import { getUser } from "@/utils/api";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,42 +27,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const user = null;
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <header className="sticky top-0 z-50 w-full border-b border-border bg-white/80 backdrop-blur-md">
-          <nav className="w-full  px-10 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
-                B
-              </div>
-              <div className="text-xl font-semibold tracking-tight text-foreground">
-                Builder<span className="text-primary">&</span>ATS
-              </div>
-            </div>
-            <div className="flex items-center space-x-6 text-sm font-medium">
-              <Link href="/" className="text-foreground/80  hover:text-white p-2 rounded-lg hover:bg-gray-500 transition-colors">
-                Home
-              </Link>
-              <Link
-                href="/resumeBuilder"
-                className="text-foreground/80  hover:text-white p-2 rounded-lg hover:bg-gray-500 transition-colors"
-              >
-                Resume Builder
-              </Link>
-              <Link
-                href="/ats"
-                className="text-foreground/80 hover:text-white p-2 rounded-lg hover:bg-gray-500   transition-colors"
-              >
-                Ats Checker
-              </Link>
-            </div>
-          </nav>
-        </header>
-        <main className="flex-1 w-full">{children}</main>
+
+        <UserProvider user={user}>
+
+          <Navbar />
+          <main className="flex-1 w-full">{children}</main>
+
+        </UserProvider>
+
+
+        
+
+
+
       </body>
     </html>
   );

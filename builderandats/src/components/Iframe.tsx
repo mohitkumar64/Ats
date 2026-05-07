@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Handlebars from "handlebars";
 
-const IframeRender = ({ data }: { data: any }) => {
+const IframeRender = ({ data , id }: { data: any , id : string}) => {
   const [html, setHtml] = useState("");
   const [template, setTemplate] = useState<HandlebarsTemplateDelegate | null>(null)
   const [isDownloading, setIsDownloading] = useState(false);
@@ -48,7 +48,7 @@ const IframeRender = ({ data }: { data: any }) => {
   const handleGenratePdf = async () => {
     setIsDownloading(true);
     try {
-      const req = await fetch("/Api/genratePdf", {
+      const req = await fetch("/api/genratePdf", {
         method: "POST",
         headers: {
           "content-type": "application/json"

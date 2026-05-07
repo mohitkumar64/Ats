@@ -195,7 +195,7 @@ const AtsResponse = () => {
             try {
                 setLoading(true);
                 const idString = Array.isArray(id) ? id[0] : id;
-                const res = await fetch(`/Api/getSummary/${idString}`, {
+                const res = await fetch(`/api/getSummary/${idString}`, {
                     method: "GET",
                 });
 

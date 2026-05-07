@@ -30,7 +30,7 @@ const AtsModule = () => {
         
 
         try {
-            const req = await fetch('/Api/parsePdf', {
+            const req = await fetch('/api/parsePdf', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/pdf",
