@@ -17,9 +17,12 @@ export async function getCurrentUser() {
     (await cookies()).delete('token')
    }
    const {id } = decoded as {id: string}
-   const user = await UserData.findOne({ userId: id })
+   const user = await UserData.findOne({ userId: id }).lean();
+  //  console.log(user);
      
-   return  user
+   return  {
+    ...user , _id : user?._id.toString() , userId : user?.userId.toString()
+   } 
     
   } catch (err) {
     console.log(err)

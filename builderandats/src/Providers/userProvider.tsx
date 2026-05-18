@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 
 const userContext = createContext<{
-  user: null | { email: string; id: string };
+  user: null | { email: string; id: string, role: string };
   setUser: React.Dispatch<React.SetStateAction<any>>;
 } | null>(null);
 
@@ -11,7 +11,7 @@ const UserProvider = ({
   user: initialUser,
   children,
 }: {
-  user: null | { email: string; id: string };
+  user: null | { email: string; id: string, role: string };
   children: React.ReactNode;
 }) => {
   const [user, setUser] = React.useState(initialUser);

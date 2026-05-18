@@ -4,7 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import UserProvider from "@/Providers/userProvider";
-import { getUser } from "@/utils/api";
+import { getCurrentUser } from "../../Lib/auth";
 
 
 const geistSans = Geist({
@@ -22,13 +22,14 @@ export const metadata: Metadata = {
   description: "Generate ATS-friendly resumes with Builder and ATS.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
 
-  const user = null;
+  const user =  await getCurrentUser();
+  
   return (
     <html
       lang="en"

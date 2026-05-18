@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import pdf from "pdf-parse/lib/pdf-parse";
-import { Ai } from "@/utils/Ai";
+import { Ai } from "@/utils/nvim";
 import { ATSResponse } from "../../../../Lib/Models/parseSchema";
 import { connectDb } from "../../../../Lib/conntectDb";
 
@@ -10,8 +10,8 @@ export async function POST(req:NextRequest) {
     const buffer = Buffer.from(await req.arrayBuffer());
     const data = await pdf(buffer);
     // console.log("Extracted PDF text:", data.text);
-    const aiResponse = await Ai(data.text);
-    //  console.log(aiResponse);
+    const aiResponse = await Ai(data.text)
+    console.log(aiResponse);
      const clean = aiResponse
         .replace(/```json/g, "")
         .replace(/```/g, "")

@@ -1,22 +1,26 @@
 import mongoose from "mongoose";
 
 const userDataSchema = new mongoose.Schema({
-    userId : {
-        type : mongoose.Schema.Types.ObjectId ,
-        ref : "User" ,
-        required : true
-    } , 
-    name : {
-        type : String ,
-    } ,
-    email : {
-        type : String ,
-        required : true
-    } , 
-    phone : {
-        type : String ,
-    } 
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+    name: {
+        type: String,
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+    },
+    role: {
+        type: String,
+        default: "user"
+    }
 
 })
 
-export  const UserData = mongoose.models.UserData ||  mongoose.model("UserData" , userDataSchema)
+export const UserData = mongoose.models.UserData || mongoose.model("UserData", userDataSchema)

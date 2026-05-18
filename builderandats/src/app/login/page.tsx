@@ -35,7 +35,7 @@ export default function LoginPage() {
           setUser(data);
           router.refresh();
           setTimeout(()=>{
-            router.back()
+            router.push("/")
           },3000)
         }else{
           toast.error("login failed")
