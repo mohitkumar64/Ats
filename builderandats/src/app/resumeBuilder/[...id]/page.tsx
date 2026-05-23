@@ -146,22 +146,22 @@ const ResumeBuilder = () => {
   };
 
   return (
-    <div className='flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-gray-50 text-foreground'>
+    <div className='flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-[#020617] text-white'>
 
       {/* ── Editor Sidebar ─────────────────────────────────────────────── */}
-      <div className='w-full md:w-[420px] lg:w-[480px] border-r border-border bg-white shadow-md flex flex-col h-full z-10'>
+      <div className='w-full md:w-[420px] lg:w-[480px] border-r border-white/10 bg-[#020617]/50 backdrop-blur-xl shadow-md flex flex-col h-full z-10'>
 
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-border bg-white sticky top-0 z-20">
+        <div className="px-6 pt-6 pb-4 border-b border-white/10 bg-[#020617] sticky top-0 z-20">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-xs font-semibold text-primary uppercase tracking-widest">Resume Builder</span>
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground">Edit Your Resume</h2>
-          <p className="text-xs text-foreground/50 mt-0.5 mb-4">Fill each section to see a live preview on the right.</p>
+          <h2 className="text-xl font-bold tracking-tight text-white">Edit Your Resume</h2>
+          <p className="text-xs text-white/50 mt-0.5 mb-4">Fill each section to see a live preview on the right.</p>
 
           {/* Progress Bar */}
-          <div className="h-1 bg-gray-100 rounded-full mb-4 overflow-hidden">
+          <div className="h-1 bg-white/10 rounded-full mb-4 overflow-hidden">
             <div
               className="h-full bg-primary rounded-full transition-all duration-500"
               style={{ width: `${((tabIndex + 1) / tabs.length) * 100}%` }}
@@ -182,12 +182,12 @@ const ResumeBuilder = () => {
                   title={!accessible ? "Complete the previous section first" : undefined}
                   className={`whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full transition-all flex items-center gap-1.5
                     ${isActive
-                      ? 'bg-primary text-white shadow-sm'
+                      ? 'bg-primary text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]'
                       : isDone
-                        ? 'bg-green-50 text-green-700 hover:bg-green-100 cursor-pointer'
+                        ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20 cursor-pointer border border-green-500/20'
                         : accessible
-                          ? 'bg-gray-100 text-foreground/60 hover:bg-gray-200 hover:text-foreground cursor-pointer'
-                          : 'bg-gray-100 text-foreground/30 cursor-not-allowed opacity-50'
+                          ? 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white cursor-pointer border border-white/5'
+                          : 'bg-white/5 text-white/30 cursor-not-allowed opacity-50 border border-white/5'
                     }`}
                 >
                   {isDone && (
@@ -209,7 +209,7 @@ const ResumeBuilder = () => {
         </div>
 
         {/* Tab Content */}
-        <div className='flex-1 overflow-y-auto p-6 space-y-1 no-scrollbar bg-gray-50/50'>
+        <div className='flex-1 overflow-y-auto p-6 space-y-1 no-scrollbar bg-transparent'>
 
           {/* PERSONAL DETAILS */}
           {activeTab === "Personal Details" && (
@@ -258,14 +258,14 @@ const ResumeBuilder = () => {
               <SectionHeader count={data.experience.length} max={3} label="Work Experiences" />
 
               {data.experience.map((exp, i) => (
-                <div key={i} className="bg-white p-5 rounded-xl border border-border shadow-sm space-y-4">
+                <div key={i} className="bg-white/5 p-5 rounded-xl border border-white/10 shadow-sm space-y-4 hover:border-white/20 transition-all">
                   <div className="flex justify-between items-center">
                     <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider">
                       <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] flex items-center justify-center font-bold">{i + 1}</span>
                       Experience
                     </span>
                     {data.experience.length > 1 && (
-                      <button onClick={() => removeListItem('experience', i)} className="text-xs text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded-md transition-colors font-medium">
+                      <button onClick={() => removeListItem('experience', i)} className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-2 py-1 rounded-md transition-colors font-medium">
                         Remove
                       </button>
                     )}
@@ -307,14 +307,14 @@ const ResumeBuilder = () => {
               <SectionHeader count={data.projects.length} max={3} label="Projects" />
 
               {data.projects.map((proj, i) => (
-                <div key={i} className="bg-white p-5 rounded-xl border border-border shadow-sm space-y-4">
+                <div key={i} className="bg-white/5 p-5 rounded-xl border border-white/10 shadow-sm space-y-4 hover:border-white/20 transition-all">
                   <div className="flex justify-between items-center">
                     <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider">
                       <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] flex items-center justify-center font-bold">{i + 1}</span>
                       Project
                     </span>
                     {data.projects.length > 1 && (
-                      <button onClick={() => removeListItem('projects', i)} className="text-xs text-red-500 hover:text-red-700 hover:bg-red-50 px-2 py-1 rounded-md transition-colors font-medium">
+                      <button onClick={() => removeListItem('projects', i)} className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-2 py-1 rounded-md transition-colors font-medium">
                         Remove
                       </button>
                     )}
@@ -348,7 +348,7 @@ const ResumeBuilder = () => {
           {/* SKILLS */}
           {activeTab === "Skills" && (
             <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
-              <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 flex gap-3 text-sm text-blue-700">
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-4 py-3 flex gap-3 text-sm text-blue-300">
                 <svg className="w-4 h-4 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
@@ -365,10 +365,10 @@ const ResumeBuilder = () => {
               </FormField>
 
               <div className="pt-2 flex justify-between items-center">
-                <button onClick={() => setActiveTab("Projects")} className="px-4 py-2 text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+                <button onClick={() => setActiveTab("Projects")} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
                   ← Back
                 </button>
-                <div className="flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-lg shadow-sm">
+                <div className="flex items-center gap-2 px-5 py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.1)]">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
@@ -381,15 +381,15 @@ const ResumeBuilder = () => {
       </div>
 
       {/* ── Preview Area ───────────────────────────────────────────────── */}
-      <div className='flex-1 bg-gray-100 flex flex-col items-center justify-start overflow-auto relative'>
+      <div className='flex-1 bg-[#020617] flex flex-col items-center justify-start overflow-auto relative'>
         {/* Preview header bar */}
-        <div className="w-full flex items-center justify-between px-6 py-3 bg-white border-b border-border shadow-sm sticky top-0 z-10">
+        <div className="w-full flex items-center justify-between px-6 py-3 bg-[#020617]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-10">
 
           {isLoadingTemplate ? (
-            <span className="text-xs text-foreground/40 animate-pulse">Loading template…</span>
+            <span className="text-xs text-white/40 animate-pulse">Loading template…</span>
           ) : (
-            <span className="text-xs font-medium text-green-600 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+            <span className="text-xs font-medium text-green-400 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] inline-block animate-pulse" />
               Live
             </span>
           )}
@@ -414,21 +414,21 @@ const ResumeBuilder = () => {
 }
 
 
-const inputCls = "w-full rounded-lg border border-input bg-white px-3 py-2.5 text-sm placeholder:text-foreground/35 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all shadow-sm";
-const inputSmCls = "w-full rounded-md border border-input bg-white px-3 py-2 text-sm placeholder:text-foreground/35 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all";
+const inputCls = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all text-white";
+const inputSmCls = "w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all text-white";
 
 const FormField = ({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) => (
   <div className="flex flex-col gap-1.5">
-    <label className="text-xs font-semibold text-foreground/80 tracking-wide">{label}</label>
-    {hint && <p className="text-[11px] text-foreground/45 -mt-1">{hint}</p>}
+    <label className="text-xs font-semibold text-white/80 tracking-wide">{label}</label>
+    {hint && <p className="text-[11px] text-white/45 -mt-1">{hint}</p>}
     {children}
   </div>
 );
 
 const SectionHeader = ({ count, max, label }: { count: number; max: number; label: string }) => (
   <div className="flex items-center justify-between">
-    <p className="text-sm text-foreground/55">{label}</p>
-    <span className={`text-xs font-bold px-2 py-1 rounded-full ${count >= max ? 'bg-orange-100 text-orange-600' : 'bg-primary/10 text-primary'}`}>
+    <p className="text-sm text-white/60">{label}</p>
+    <span className={`text-xs font-bold px-2 py-1 rounded-full ${count >= max ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'bg-primary/10 text-primary border border-primary/20'}`}>
       {count}/{max}
     </span>
   </div>
@@ -437,7 +437,7 @@ const SectionHeader = ({ count, max, label }: { count: number; max: number; labe
 const AddButton = ({ onClick, label }: { onClick: () => void; label: string }) => (
   <button
     onClick={onClick}
-    className="w-full py-3 border-2 border-dashed border-primary/25 text-primary/70 text-sm font-medium rounded-xl hover:bg-primary/5 hover:border-primary/40 hover:text-primary transition-all flex items-center justify-center gap-2"
+    className="w-full py-3 border-2 border-dashed border-primary/20 text-primary/70 text-sm font-medium rounded-xl hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all flex items-center justify-center gap-2"
   >
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
@@ -462,7 +462,7 @@ const NavButtons = ({
   <div className="pt-4 space-y-2">
     {/* Inline validation error */}
     <div
-      className={`flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-100 px-3 py-2 rounded-lg transition-all duration-300 overflow-hidden ${showError ? 'max-h-12 opacity-100' : 'max-h-0 opacity-0 py-0 border-0'
+      className={`flex items-center gap-2 text-xs text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg transition-all duration-300 overflow-hidden ${showError ? 'max-h-12 opacity-100' : 'max-h-0 opacity-0 py-0 border-0'
         }`}
     >
       <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -473,7 +473,7 @@ const NavButtons = ({
 
     <div className="flex justify-between items-center">
       {onBack ? (
-        <button onClick={onBack} className="px-4 py-2 text-sm font-medium text-foreground/55 hover:text-foreground transition-colors">
+        <button onClick={onBack} className="px-4 py-2 text-sm font-medium text-white/50 hover:text-white transition-colors">
           ← Back
         </button>
       ) : <div />}

@@ -8,8 +8,6 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
   const [isDownloading, setIsDownloading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // ✅ FIX: Added Stringhtml to dependency array so template recompiles when the
-  //    async API data arrives. Guard against undefined/empty string.
   useEffect(() => {
     if (!Stringhtml) return;
     try {
@@ -108,7 +106,7 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
       <div className="w-full h-full relative overflow-hidden rounded">
         {html ? (
           <iframe
-            srcDoc={html}
+            srcDoc={html + "<style>::-webkit-scrollbar { display: none; } body { -ms-overflow-style: none; scrollbar-width: none; }</style>"}
             title="Resume Preview"
             className="absolute top-0 left-0 border-0 bg-white"
             style={{

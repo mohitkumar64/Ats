@@ -2,12 +2,11 @@
 import React, { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import Loader from '@/utils/LottieLoader';
-
+import { Upload, AlertCircle, ScanSearch, Sparkles } from 'lucide-react';
 
 const AtsModule = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-
     const [error, setError] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
     const router = useRouter();
@@ -16,7 +15,6 @@ const AtsModule = () => {
         if (e.target.files && e.target.files.length > 0) {
             setFileName(e.target.files[0].name);
             setError(null);
-
         }
     };
 
@@ -29,7 +27,6 @@ const AtsModule = () => {
         setIsUploading(true);
         setError(null);
 
-
         try {
             const req = await fetch('/api/parsePdf', {
                 method: "POST",
@@ -41,10 +38,7 @@ const AtsModule = () => {
 
             if (req.ok) {
                 const res = await req.json();
-                // console.log(res);
-
                 router.push(`/ats/${res.id}`)
-
             } else {
                 setError("Failed to parse the PDF. Please try again.");
             }
@@ -57,26 +51,37 @@ const AtsModule = () => {
     }
 
     return (
-        <div className='min-h-[calc(100vh-4rem)] max-h-[95vh] overflow-hidden  w-full bg-background text-foreground flex flex-col items-center  px-4 sm:px-6'>
-            {
-                isUploading && (
-                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-                        <Loader />
-                    </div>
-                )
-            }
-            <div className="w-full  py-12 max-w-3xl text-center space-y-4 mb-10">
-                <h1 className="text-4xl font-extrabold tracking-tight text-foreground">ATS Resume Scanner</h1>
-                <p className="text-lg text-foreground/60 max-w-2xl mx-auto">
-                    Upload your resume to instantly extract and analyze its content. Discover how Applicant Tracking Systems see your professional profile.
+        <div className='min-h-[calc(100vh-4rem)] w-full bg-[#020617] text-white flex flex-col items-center px-4 sm:px-6 relative overflow-hidden'>
+            {/* BG Glows */}
+            <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-indigo-500/10 blur-[150px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-0 right-0 w-[400px] h-[300px] bg-purple-500/8 blur-[120px] rounded-full pointer-events-none" />
+
+            {isUploading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#020617]/80 backdrop-blur-md">
+                    <Loader />
+                </div>
+            )}
+
+            {/* Header */}
+            <div className="w-full py-16 max-w-3xl text-center space-y-4 mb-10 relative z-10">
+                <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-5 py-1.5 text-sm text-indigo-300 mb-4">
+                    <ScanSearch className="w-4 h-4" />
+                    AI-Powered Analysis
+                </div>
+                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
+                    ATS Resume Scanner
+                </h1>
+                <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                    Upload your resume to instantly extract and analyze its content.
+                    Discover how Applicant Tracking Systems see your professional profile.
                 </p>
             </div>
 
-            <div className='w-full max-w-2xl bg-white border border-border shadow-xl rounded-2xl p-8 sm:p-12 flex flex-col items-center gap-8'>
-
+            {/* Upload Card */}
+            <div className='w-full max-w-2xl glass-card p-8 sm:p-12 flex flex-col items-center gap-8 relative z-10'>
                 {/* Upload Area */}
                 <div
-                    className="w-full relative border-2 border-dashed border-primary/30 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors flex flex-col items-center justify-center p-10 cursor-pointer group"
+                    className="w-full relative border-2 border-dashed border-indigo-500/25 rounded-2xl bg-indigo-500/5 hover:bg-indigo-500/10 transition-all duration-300 flex flex-col items-center justify-center p-10 cursor-pointer group"
                     onClick={() => inputRef.current?.click()}
                 >
                     <input
@@ -86,24 +91,27 @@ const AtsModule = () => {
                         className="hidden"
                         onChange={handleFileChange}
                     />
-                    <div className="bg-white p-4 rounded-full shadow-sm mb-4 group-hover:scale-105 transition-transform duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="17 8 12 3 7 8"></polyline>
-                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
+                    <div className="w-16 h-16 rounded-2xl bg-indigo-500/15 border border-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <Upload className="w-7 h-7 text-indigo-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground">
+                    <h3 className="text-lg font-semibold text-white">
                         {fileName ? "File Selected" : "Click to upload"}
                     </h3>
-                    <p className="text-sm text-foreground/60 mt-1 text-center">
-                        {fileName ? fileName : "Upload your PDF resume (max 5MB)"}
+                    <p className="text-sm text-gray-500 mt-1 text-center">
+                        {fileName ? (
+                            <span className="text-indigo-300 flex items-center gap-1.5">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                {fileName}
+                            </span>
+                        ) : (
+                            "Upload your PDF resume (max 5MB)"
+                        )}
                     </p>
                 </div>
 
                 {error && (
-                    <div className="w-full bg-red-50 text-red-600 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <div className="w-full bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
                         {error}
                     </div>
                 )}
@@ -111,39 +119,24 @@ const AtsModule = () => {
                 <button
                     onClick={handleUpload}
                     disabled={!fileName || isUploading}
-                    className='w-full py-4 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed flex justify-center items-center gap-2'
+                    className='w-full py-4 btn-primary font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed flex justify-center items-center gap-2 text-base'
                 >
                     {isUploading ? (
                         <>
-                            <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                             Scanning Document...
                         </>
                     ) : (
-                        "Scan Resume"
+                        <>
+                            <ScanSearch className="w-5 h-5" />
+                            Scan Resume
+                        </>
                     )}
                 </button>
             </div>
-
-            {/* Results Area */}
-            {/* {parsedData && (
-            <div className="w-full max-w-4xl mt-12 animate-in fade-in slide-in-from-bottom-8 duration-500">
-                <div className="bg-white border border-border shadow-xl rounded-2xl overflow-hidden">
-                    <div className="bg-foreground/5 border-b border-border px-6 py-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        <h3 className="font-semibold text-foreground">Extracted Text Content</h3>
-                    </div>
-                    <div className="p-6">
-                        <pre className="whitespace-pre-wrap font-mono text-sm text-foreground/80 bg-gray-50 p-6 rounded-xl border border-gray-100 max-h-[500px] overflow-y-auto">
-                            {parsedData}
-                        </pre>
-                    </div>
-                </div>
-            </div>
-        )} */}
-
         </div>
     )
 }
