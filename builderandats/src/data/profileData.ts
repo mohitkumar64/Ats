@@ -130,6 +130,10 @@ export const profileData: ProfileData = {
       "Time Management",
       "Adaptability",
     ],
+    nonTechnical: {
+      commonSkills: ["Leadership", "Communication", "Project Management"],
+      otherSkills: ["Innovation", "Strategic Planning"],
+    },
   },
   experience: [
     {
