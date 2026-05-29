@@ -18,13 +18,69 @@ const COMMON_NON_TECHNICAL_SKILLS = [
   "Negotiation",
   "Decision Making",
   "Organizational Skills",
+  "Public Speaking",
+  "Writing & Documentation",
+
+  // Business & Management
+  "Strategic Planning",
+  "Business Development",
+  "Stakeholder Management",
+  "Operations Management",
+  "Risk Management",
+  "Budget Management",
+  "Conflict Resolution",
+  "Process Improvement",
+
+  // HR & Administration
+  "Recruitment",
+  "Talent Acquisition",
+  "Employee Relations",
+  "Performance Management",
+  "Training & Development",
+  "Office Administration",
+
+  // Sales & Marketing
+  "Sales",
+  "Market Research",
+  "Brand Management",
+  "Digital Marketing",
+  "Content Creation",
+  "Customer Relationship Management",
+  "Client Management",
+
+  // Education & Training
+  "Teaching",
+  "Curriculum Development",
+  "Mentoring",
+  "Student Counseling",
+  "Classroom Management",
+
+  // Legal
   "Legal Research",
+  "Case Analysis",
+  "Contract Drafting",
+  "Compliance Management",
+
+  // Healthcare
   "Medical Knowledge",
   "Patient Care",
   "Clinical Skills",
+  "Healthcare Administration",
   "Counseling",
-  "Public Speaking",
-  "Writing & Documentation",
+
+  // General Professional Skills
+  "Adaptability",
+  "Attention to Detail",
+  "Emotional Intelligence",
+  "Interpersonal Skills",
+  "Multitasking",
+  "Networking",
+  "Presentation Skills",
+  "Research Skills",
+  "Analytical Thinking",
+  "Event Management",
+  "Cross-functional Collaboration",
+  "Relationship Building"
 ];
 
 export default function SkillsForm({ data, onSave }: SkillsFormProps) {
