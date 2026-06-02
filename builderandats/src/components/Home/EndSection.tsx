@@ -5,10 +5,13 @@ import gsap from "gsap";
 
 const EndSection = () => {
     return (
-        <section className="rv">
+        <section className="rv "
+
+
+        >
             <div className="container-wide py-24 lg:py-32">
                 <div
-                    className="rounded-2xl p-10 lg:p-16 relative overflow-hidden"
+                    className="rounded-2xl p-10 lg:p-16 relative overflow-hidden  hover:scale-[1.005] transition-all duration-300"
                     style={{
                         background: "linear-gradient(135deg, #110A05 0%, #0F0C07 40%, #0E1117 100%)",
                         border: "1px solid rgba(232,117,74,0.14)",
@@ -30,7 +33,7 @@ const EndSection = () => {
                         style={{ background: "linear-gradient(90deg, transparent, rgba(232,117,74,0.30), transparent)" }}
                     />
 
-                    <div className="relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div className="relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center   ">
                         <div>
                             <p
                                 className="mb-5"
@@ -78,7 +81,7 @@ const EndSection = () => {
                                 <div
                                     key={s.label}
                                     className=" relative flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.025)] border-[rgba(255,255,255,0.04)]"
-                                    
+
                                     onMouseEnter={(e) => {
                                         const target = e.currentTarget.querySelector(".gradient") as HTMLElement;
                                         gsap.to(target, {
@@ -119,7 +122,7 @@ const EndSection = () => {
                                             {s.val}
                                         </span>
                                     </div>
-                                    
+
                                 </div>
                             ))}
 
@@ -133,7 +136,7 @@ const EndSection = () => {
                                         Scan Resume Now
                                     </button>
                                 </Link>
-                                <Link href="/resumeBuilder  "   className=" hover:-rotate-5 duration-300 transition-transform">
+                                <Link href="/resumeBuilder  " className=" hover:-rotate-5 duration-300 transition-transform">
                                     <button
                                         className="btn btn-ghost"
                                         style={{ padding: "0.9375rem 1.5rem", fontSize: "0.9375rem" }}

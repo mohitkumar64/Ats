@@ -27,6 +27,10 @@ export interface ProfileData {
       tools: string[];
     };
     soft: string[];
+    nonTechnical?: {
+      commonSkills: string[];
+      otherSkills: string[];
+    };
   };
   experience: {
     company: string;

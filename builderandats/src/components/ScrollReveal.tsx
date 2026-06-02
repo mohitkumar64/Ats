@@ -17,7 +17,7 @@ interface ScrollRevealProps {
   duration?: number;
   stagger?: number;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 }
 
 const variantConfig: Record<AnimationVariant, gsap.TweenVars> = {

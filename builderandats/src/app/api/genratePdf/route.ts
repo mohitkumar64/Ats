@@ -16,7 +16,7 @@ export  async function POST(req : NextRequest ){
     })
     await browser.close();
 
-    return new NextResponse(pdf , {
+    return new NextResponse(Buffer.from(pdf) , {
         headers : {
             "content-type" : "application/pdf" ,
             "content-diposition" : "attachment; filename=generated.pdf"

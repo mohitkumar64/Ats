@@ -117,7 +117,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
       nonTechnical: {
         ...formData.nonTechnical,
         commonSkills: formData.nonTechnical.commonSkills.includes(skill)
-          ? formData.nonTechnical.commonSkills.filter((s) => s !== skill)
+          ? formData.nonTechnical.commonSkills.filter((s: string) => s !== skill)
           : [...formData.nonTechnical.commonSkills, skill],
       },
     });
@@ -136,17 +136,17 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
 
     const formattedData = {
       technical: {
-        languages: formData.technical.languages.split(",").map((i) => i.trim()).filter(Boolean),
-        frameworks: formData.technical.frameworks.split(",").map((i) => i.trim()).filter(Boolean),
-        tools: formData.technical.tools.split(",").map((i) => i.trim()).filter(Boolean),
-        databases: formData.technical.databases.split(",").map((i) => i.trim()).filter(Boolean),
-        softSkills: formData.technical.softSkills.split(",").map((i) => i.trim()).filter(Boolean),
-        cloud: formData.technical.cloud.split(",").map((i) => i.trim()).filter(Boolean),
-        devops: formData.technical.devops.split(",").map((i) => i.trim()).filter(Boolean),
+        languages: formData.technical.languages.split(",").map((i: string) => i.trim()).filter(Boolean),
+        frameworks: formData.technical.frameworks.split(",").map((i: string) => i.trim()).filter(Boolean),
+        tools: formData.technical.tools.split(",").map((i: string) => i.trim()).filter(Boolean),
+        databases: formData.technical.databases.split(",").map((i: string) => i.trim()).filter(Boolean),
+        softSkills: formData.technical.softSkills.split(",").map((i: string) => i.trim()).filter(Boolean),
+        cloud: formData.technical.cloud.split(",").map((i: string) => i.trim()).filter(Boolean),
+        devops: formData.technical.devops.split(",").map((i: string) => i.trim()).filter(Boolean),
       },
       nonTechnical: {
         commonSkills: formData.nonTechnical.commonSkills,
-        otherSkills: formData.nonTechnical.otherSkills.split(",").map((i) => i.trim()).filter(Boolean),
+        otherSkills: formData.nonTechnical.otherSkills.split(",").map((i: string) => i.trim()).filter(Boolean),
       },
     };
 

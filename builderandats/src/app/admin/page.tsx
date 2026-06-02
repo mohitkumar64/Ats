@@ -41,7 +41,7 @@ const AdminPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const html = htmlRef?.current?.files[0];
+    const html = htmlRef?.current?.files?.[0];
     if (!html) {
       alert("please upload html file first");
       return;

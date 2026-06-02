@@ -53,7 +53,7 @@ const TemplateSelection = () => {
     getTemplates();
   }, []);
 
-   const handleDelete = async (e ) => {
+   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement> ) => {
     e.stopPropagation();
    const  id = e.currentTarget.dataset.id
     if (!confirm("Are you sure you want to delete this template? This action cannot be undone.")) {
@@ -69,7 +69,8 @@ const TemplateSelection = () => {
         getTemplates();
       } else {
 
-        toast.error(res.error || "Failed to delete template", { style: toastStyle });
+        const data = await res.json();
+        toast.error(data.error || "Failed to delete template", { style: toastStyle });
       }
     } catch (err) {
       toast.error("An error occurred while deleting the template", { style: toastStyle });

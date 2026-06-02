@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary';
 import { Template } from "../../../../Lib/Models/templates";
 
 
@@ -57,12 +57,15 @@ export async function POST(req: NextRequest) {
 }
 
 
-const uploadResult = async (buffer: Buffer) => {
+const uploadResult = async (buffer: Buffer): Promise<UploadApiResponse> => {
 
-    return await new Promise((resolve, reject) => {
+    return await new Promise<UploadApiResponse>((resolve, reject) => {
         cloudinary.uploader.upload_stream({ folder: 'resumes' }, (error, uploadResult) => {
             if (error) {
                 return reject(error);
+            }
+            if (!uploadResult) {
+                return reject(new Error("Upload failed: no result returned"));
             }
             return resolve(uploadResult);
         }).end(buffer);
