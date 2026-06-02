@@ -67,16 +67,19 @@ export default function BasicInfoForm({ data, onSave }: BasicInfoFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 text-white">
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-2xl font-bold text-white flex items-center gap-2">
-          <User className="text-indigo-400 w-6 h-6" />
+        <h3
+          className="text-xl font-bold flex items-center gap-2.5"
+          style={{ fontFamily: "'Syne', system-ui, sans-serif", color: "var(--text-primary)" }}
+        >
+          <User className="w-5 h-5" style={{ color: "var(--accent)" }} />
           Basic Information
         </h3>
         <button
           type="submit"
           disabled={saving}
-          className="btn-primary px-5 py-2 text-sm flex items-center gap-2 disabled:opacity-50"
+          className="btn-primary px-5 py-2.5 text-sm flex items-center gap-2"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Save Changes
@@ -84,21 +87,33 @@ export default function BasicInfoForm({ data, onSave }: BasicInfoFormProps) {
       </div>
 
       {/* Profile Image */}
-      <div className="flex items-center gap-6 p-5 bg-white/5 border border-white/10 rounded-2xl">
-        <div className="relative w-24 h-24 rounded-full overflow-hidden bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
+      <div
+        className="flex items-center gap-6 p-5 rounded-2xl"
+        style={{
+          background: "rgba(255,255,255,0.02)",
+          border: "1px solid var(--border)",
+        }}
+      >
+        <div
+          className="relative w-24 h-24 rounded-full overflow-hidden flex items-center justify-center shrink-0"
+          style={{
+            background: "var(--accent-dim)",
+            border: "2px solid rgba(232,117,74,0.20)",
+          }}
+        >
           {formData.profileImage ? (
             <img src={formData.profileImage} alt="Profile" className="w-full h-full object-cover" />
           ) : (
-            <User className="w-10 h-10 text-indigo-300" />
+            <User className="w-10 h-10" style={{ color: "var(--accent)" }} />
           )}
           {uploading && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(8,10,15,0.65)" }}>
               <Loader2 className="w-6 h-6 text-white animate-spin" />
             </div>
           )}
         </div>
         <div>
-          <h4 className="text-sm font-medium text-gray-300 mb-2">Profile Picture</h4>
+          <h4 className="text-sm font-medium mb-2" style={{ color: "var(--text-secondary)" }}>Profile Picture</h4>
           <input
             type="file"
             accept="image/*"
@@ -110,88 +125,102 @@ export default function BasicInfoForm({ data, onSave }: BasicInfoFormProps) {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+            className="px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 cursor-pointer"
+            style={{
+              background: "var(--accent-dim)",
+              border: "1px solid rgba(232,117,74,0.18)",
+              color: "var(--accent)",
+              transition: "all 200ms cubic-bezier(0.23,1,0.32,1)",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.background = "var(--accent-mid)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.background = "var(--accent-dim)";
+            }}
           >
             <Upload className="w-4 h-4" />
             Upload New Image
           </button>
-          <p className="text-xs text-gray-500 mt-2">Recommended: Square image, max 2MB.</p>
+          <p className="text-xs mt-2" style={{ color: "var(--text-tertiary)" }}>Recommended: Square image, max 2MB.</p>
         </div>
       </div>
 
       {/* Grid Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">Full Name</label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Full Name</label>
           <div className="relative">
-            <User className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+            <User className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+              className="input-field"
               placeholder="John Doe"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">Professional Title</label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Professional Title</label>
           <div className="relative">
-            <Briefcase className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+            <Briefcase className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
             <input
               type="text"
               name="professionalTitle"
               value={formData.professionalTitle}
               onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+              className="input-field"
               placeholder="Software Engineer"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">Email Address</label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Email Address</label>
           <div className="relative">
-            <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+            <Mail className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               disabled
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm outline-none text-gray-400 cursor-not-allowed"
+              className="input-field"
             />
           </div>
-          <p className="text-xs text-gray-500 mt-1">Email cannot be changed.</p>
+          <p className="text-xs mt-1" style={{ color: "var(--text-tertiary)" }}>Email cannot be changed.</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">Phone Number</label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Phone Number</label>
           <div className="relative">
-            <Phone className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+            <Phone className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
             <input
               type="text"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+              className="input-field"
               placeholder="+1 234 567 890"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">Location</label>
+          <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Location</label>
           <div className="relative">
-            <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+            <MapPin className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
             <input
               type="text"
               name="location"
               value={formData.location}
               onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+              className="input-field"
               placeholder="New York, USA"
             />
           </div>
@@ -200,81 +229,87 @@ export default function BasicInfoForm({ data, onSave }: BasicInfoFormProps) {
 
       {/* Bio */}
       <div>
-        <label className="block text-sm font-medium text-gray-400 mb-1.5">Bio / About Me</label>
+        <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Bio / About Me</label>
         <textarea
           name="bio"
           value={formData.bio}
           onChange={handleChange}
           rows={4}
-          className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all resize-none"
+          className="textarea-field"
           placeholder="Tell us about yourself..."
         />
       </div>
 
       {/* Social Links */}
-      <h4 className="text-lg font-medium text-white pt-4 border-t border-white/10">Social & Links</h4>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">Portfolio Website</label>
-          <div className="relative">
-            <LinkIcon className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
-            <input
-              type="url"
-              name="portfolioWebsite"
-              value={formData.portfolioWebsite}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
-              placeholder="https://yourwebsite.com"
-            />
+      <div style={{ borderTop: "1px solid var(--border)", paddingTop: "1.5rem" }}>
+        <h4
+          className="text-base font-bold mb-6"
+          style={{ fontFamily: "'Syne', system-ui, sans-serif", color: "var(--text-primary)" }}
+        >
+          Social & Links
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Portfolio Website</label>
+            <div className="relative">
+              <LinkIcon className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
+              <input
+                type="url"
+                name="portfolioWebsite"
+                value={formData.portfolioWebsite}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="https://yourwebsite.com"
+              />
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">GitHub URL</label>
-          <div className="relative">
-            <Code2 className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
-            <input
-              type="url"
-              name="githubUrl"
-              value={formData.githubUrl}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
-              placeholder="https://github.com/username"
-            />
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>GitHub URL</label>
+            <div className="relative">
+              <Code2 className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
+              <input
+                type="url"
+                name="githubUrl"
+                value={formData.githubUrl}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="https://github.com/username"
+              />
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">LinkedIn URL</label>
-          <div className="relative">
-            <LinkIcon className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
-            <input
-              type="url"
-              name="linkedinUrl"
-              value={formData.linkedinUrl}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
-              placeholder="https://linkedin.com/in/username"
-            />
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>LinkedIn URL</label>
+            <div className="relative">
+              <LinkIcon className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
+              <input
+                type="url"
+                name="linkedinUrl"
+                value={formData.linkedinUrl}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="https://linkedin.com/in/username"
+              />
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1.5">Twitter URL</label>
-          <div className="relative">
-            <MessageCircle className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
-            <input
-              type="url"
-              name="twitterUrl"
-              value={formData.twitterUrl}
-              onChange={handleChange}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
-              placeholder="https://twitter.com/username"
-            />
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Twitter URL</label>
+            <div className="relative">
+              <MessageCircle className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
+              <input
+                type="url"
+                name="twitterUrl"
+                value={formData.twitterUrl}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="https://twitter.com/username"
+              />
+            </div>
           </div>
         </div>
       </div>
     </form>
   );
 }
-

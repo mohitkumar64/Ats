@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     try {
         await connectDb();
         const templates = await Template.find();
-        console.log("templates", templates)
+        // console.log("templates", templates)
         return NextResponse.json({ success: true, templates }, { status: 200 })
 
     }

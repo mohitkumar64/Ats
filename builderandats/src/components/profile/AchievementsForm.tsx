@@ -45,8 +45,8 @@ export default function AchievementsForm({ data, onSave }: AchievementsFormProps
     <form onSubmit={handleSubmit} className="space-y-8 text-white">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-2xl font-bold text-white flex items-center gap-2 mb-1">
-            <Trophy className="text-indigo-400 w-6 h-6" />
+          <h3 className="text-xl font-bold flex items-center gap-2 mb-1">
+            <Trophy className="w-5 h-5" style={{ color: "var(--accent)" }} />
             Achievements
           </h3>
           <p className="text-sm text-gray-400">Add hackathons, awards, or open source contributions.</p>
@@ -63,7 +63,7 @@ export default function AchievementsForm({ data, onSave }: AchievementsFormProps
 
       <div className="space-y-6">
         {achievements.map((achieve, index) => (
-          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-indigo-500/30">
+          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-[rgba(232,117,74,0.18)]">
             <button
               type="button"
               onClick={() => handleRemove(index)}
@@ -75,54 +75,54 @@ export default function AchievementsForm({ data, onSave }: AchievementsFormProps
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Title / Award Name</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Title / Award Name</label>
                 <div className="relative">
-                  <Trophy className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Trophy className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={achieve.title}
                     onChange={(e) => handleChange(index, "title", e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="1st Place - Global Hackathon"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Date</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Date</label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Calendar className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={achieve.date}
                     onChange={(e) => handleChange(index, "date", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="Oct 2023"
                   />
                 </div>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Description</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Description</label>
                 <textarea
                   value={achieve.description}
                   onChange={(e) => handleChange(index, "description", e.target.value)}
                   rows={2}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all resize-none"
+                  className="textarea-field"
                   placeholder="Briefly describe the achievement..."
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Related Link (Optional)</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Related Link (Optional)</label>
                 <div className="relative">
-                  <LinkIcon className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <LinkIcon className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="url"
                     value={achieve.link}
                     onChange={(e) => handleChange(index, "link", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="https://..."
                   />
                 </div>
@@ -135,7 +135,7 @@ export default function AchievementsForm({ data, onSave }: AchievementsFormProps
       <button
         type="button"
         onClick={handleAdd}
-        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-indigo-500/50 hover:bg-indigo-500/5 rounded-2xl flex items-center justify-center gap-2 text-indigo-300 font-medium transition-all duration-300"
+        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-[rgba(232,117,74,0.30)] hover:bg-[rgba(232,117,74,0.03)] rounded-2xl flex items-center justify-center gap-2 text-[#E8754A] font-medium transition-all duration-300"
       >
         <Plus className="w-5 h-5" />
         Add Achievement

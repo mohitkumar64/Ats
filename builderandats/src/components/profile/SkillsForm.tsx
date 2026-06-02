@@ -168,8 +168,8 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
     <form onSubmit={handleSubmit} className="space-y-8 text-white">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-2xl font-bold text-white flex items-center gap-2 mb-1">
-            <Code className="text-indigo-400 w-6 h-6" />
+          <h3 className="text-xl font-bold flex items-center gap-2 mb-1">
+            <Code className="w-5 h-5" style={{ color: "var(--accent)" }} />
             Skills
           </h3>
           <p className="text-sm text-gray-400">
@@ -198,7 +198,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
           }}
           className={`px-4 py-3 text-sm font-medium transition-all flex items-center gap-2 ${
             activeTab === "technical"
-              ? "text-indigo-400 border-b-2 border-indigo-400"
+              ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
               : "text-gray-400 hover:text-white"
           }`}
         >
@@ -213,7 +213,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
           }}
           className={`px-4 py-3 text-sm font-medium transition-all flex items-center gap-2 ${
             activeTab === "nonTechnical"
-              ? "text-indigo-400 border-b-2 border-indigo-400"
+              ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
               : "text-gray-400 hover:text-white"
           }`}
         >
@@ -228,7 +228,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
           {technicalCategories.map((cat, index) => (
             <div key={index} className={cat.name === "softSkills" ? "md:col-span-2" : ""}>
               <label className="block text-sm font-medium text-gray-400 mb-1.5 flex items-center gap-2">
-                <cat.icon className="w-4 h-4 text-indigo-400" />
+                <cat.icon className="w-4 h-4 text-[var(--accent)]" />
                 {cat.label}
               </label>
               <input
@@ -236,7 +236,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
                 name={cat.name}
                 value={(formData.technical as any)[cat.name]}
                 onChange={handleTechnicalChange}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                className="input-field-plain"
                 placeholder={cat.placeholder}
               />
             </div>
@@ -254,7 +254,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
               onClick={() => setActiveSubTab("common")}
               className={`px-3 py-2 text-sm font-medium transition-all ${
                 activeSubTab === "common"
-                  ? "text-indigo-400 border-b-2 border-indigo-400"
+                  ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -265,7 +265,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
               onClick={() => setActiveSubTab("other")}
               className={`px-3 py-2 text-sm font-medium transition-all ${
                 activeSubTab === "other"
-                  ? "text-indigo-400 border-b-2 border-indigo-400"
+                  ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -281,13 +281,13 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
                 {COMMON_NON_TECHNICAL_SKILLS.map((skill) => (
                   <label
                     key={skill}
-                    className="flex items-center gap-2 p-3 rounded-lg border border-white/10 hover:border-indigo-400/50 hover:bg-indigo-500/5 cursor-pointer transition-all"
+                    className="flex items-center gap-2 p-3 rounded-lg border border-white/10 hover:border-[rgba(232,117,74,0.25)] hover:bg-[rgba(232,117,74,0.03)] cursor-pointer transition-all"
                   >
                     <input
                       type="checkbox"
                       checked={formData.nonTechnical.commonSkills.includes(skill)}
                       onChange={() => handleCommonSkillToggle(skill)}
-                      className="w-4 h-4 accent-indigo-500 cursor-pointer"
+                      className="w-4 h-4 accent-[#E8754A] cursor-pointer"
                     />
                     <span className="text-sm text-gray-300">{skill}</span>
                   </label>
@@ -299,13 +299,13 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
           {/* Other Skills Sub-Tab */}
           {activeSubTab === "other" && (
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1.5">Add other skills (comma separated):</label>
+              <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Add other skills (comma separated):</label>
               <input
                 type="text"
                 name="otherSkills"
                 value={formData.nonTechnical.otherSkills}
                 onChange={handleOtherSkillsChange}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                className="input-field-plain"
                 placeholder="e.g., Litigation, Pediatrics, Legal Writing"
               />
             </div>

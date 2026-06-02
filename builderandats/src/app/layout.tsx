@@ -1,26 +1,42 @@
 import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import UserProvider from "@/Providers/userProvider";
+import Footer from "@/components/Footer";
 import { getCurrentUser } from "../../Lib/auth";
 
-const inter = Inter({
-  variable: "--font-geist-sans",
+
+const syne = Syne({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Builder & ATS | AI-Powered Resume Builder & ATS Checker",
   description:
-    "Create stunning, ATS-optimized resumes with AI-powered analysis. Get instant ATS scores, smart suggestions, and professional templates. Build your dream resume in minutes.",
-  keywords: "resume builder, ATS checker, AI resume, professional resume, job application",
+    "Stop guessing. Beat Applicant Tracking Systems with AI-driven resume analysis and a live ATS-optimized builder. Get 90%+ match rates.",
+  keywords: "resume builder, ATS checker, AI resume, professional resume, job application, ATS score",
+  icons: {
+    icon: "/logo.svg"
+  }
 };
 
 export default async function RootLayout({
@@ -33,13 +49,15 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-full flex flex-col bg-[#080A0F] text-[#F0F2F5]">
         <UserProvider user={user}>
           <Navbar />
           <main className="flex-1 w-full">{children}</main>
+          
         </UserProvider>
+        <Footer />
       </body>
     </html>
   );

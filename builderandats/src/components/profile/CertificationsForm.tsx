@@ -46,8 +46,8 @@ export default function CertificationsForm({ data, onSave }: CertificationsFormP
     <form onSubmit={handleSubmit} className="space-y-8 text-white">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-2xl font-bold text-white flex items-center gap-2 mb-1">
-            <Award className="text-indigo-400 w-6 h-6" />
+          <h3 className="text-xl font-bold flex items-center gap-2 mb-1">
+            <Award className="w-5 h-5" style={{ color: "var(--accent)" }} />
             Certifications
           </h3>
           <p className="text-sm text-gray-400">Add your professional certifications and licenses.</p>
@@ -64,7 +64,7 @@ export default function CertificationsForm({ data, onSave }: CertificationsFormP
 
       <div className="space-y-6">
         {certifications.map((cert, index) => (
-          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-indigo-500/30">
+          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-[rgba(232,117,74,0.18)]">
             <button
               type="button"
               onClick={() => handleRemove(index)}
@@ -76,69 +76,69 @@ export default function CertificationsForm({ data, onSave }: CertificationsFormP
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Certification Title</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Certification Title</label>
                 <div className="relative">
-                  <Award className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Award className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={cert.title}
                     onChange={(e) => handleChange(index, "title", e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="AWS Certified Solutions Architect"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Issuing Organization</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Issuing Organization</label>
                 <input
                   type="text"
                   value={cert.issuer}
                   onChange={(e) => handleChange(index, "issuer", e.target.value)}
                   required
-                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                  className="input-field-plain"
                   placeholder="Amazon Web Services"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Issue Date</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Issue Date</label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Calendar className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={cert.issueDate}
                     onChange={(e) => handleChange(index, "issueDate", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="May 2023"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Credential ID</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Credential ID</label>
                 <div className="relative">
-                  <Hash className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Hash className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={cert.credentialId}
                     onChange={(e) => handleChange(index, "credentialId", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="ABC-123456"
                   />
                 </div>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Credential URL</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Credential URL</label>
                 <div className="relative">
-                  <LinkIcon className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <LinkIcon className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="url"
                     value={cert.credentialUrl}
                     onChange={(e) => handleChange(index, "credentialUrl", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="https://credential.net/..."
                   />
                 </div>
@@ -151,7 +151,7 @@ export default function CertificationsForm({ data, onSave }: CertificationsFormP
       <button
         type="button"
         onClick={handleAdd}
-        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-indigo-500/50 hover:bg-indigo-500/5 rounded-2xl flex items-center justify-center gap-2 text-indigo-300 font-medium transition-all duration-300"
+        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-[rgba(232,117,74,0.30)] hover:bg-[rgba(232,117,74,0.03)] rounded-2xl flex items-center justify-center gap-2 text-[#E8754A] font-medium transition-all duration-300"
       >
         <Plus className="w-5 h-5" />
         Add Certification

@@ -9,9 +9,10 @@ import ExperienceForm from "@/components/profile/ExperienceForm";
 import SkillsForm from "@/components/profile/SkillsForm";
 import CertificationsForm from "@/components/profile/CertificationsForm";
 import AchievementsForm from "@/components/profile/AchievementsForm";
-import { User, Book, Briefcase, Code, Award, Trophy, Loader2 } from "lucide-react";
-import Navbar from "@/components/Navbar";
+import { User, Book, Briefcase, Code, Award, Trophy, Loader2 , Paperclip } from "lucide-react";
+
 import Footer from "@/components/Footer";
+import ResearchForm from "@/components/profile/ResearchForm";
 
 export default function ProfileDashboard() {
   const { user } = useUser();
@@ -26,7 +27,16 @@ export default function ProfileDashboard() {
     { id: "skills", label: "Skills", icon: Code },
     { id: "certifications", label: "Certifications", icon: Award },
     { id: "achievements", label: "Achievements", icon: Trophy },
+    { id: "research", label: "Research", icon: Paperclip },
   ];
+
+  const toastStyle = {
+    background: "var(--surface)",
+    color: "#F0F2F5",
+    borderRadius: "12px",
+    border: "1px solid rgba(255,255,255,0.08)",
+    fontSize: "14px",
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -36,11 +46,11 @@ export default function ProfileDashboard() {
           const data = await res.json();
           setProfileData(data);
         } else {
-          toast.error("Failed to load profile data");
+          toast.error("Failed to load profile data", { style: toastStyle });
         }
       } catch (error) {
         console.error(error);
-        toast.error("Error loading profile");
+        toast.error("Error loading profile", { style: toastStyle });
       } finally {
         setLoading(false);
       }
@@ -61,63 +71,126 @@ export default function ProfileDashboard() {
       if (res.ok) {
         const updatedProfile = await res.json();
         setProfileData(updatedProfile);
-        toast.success("Profile updated successfully!");
+        toast.success("Profile updated successfully!", { style: toastStyle });
       } else {
-        toast.error("Failed to update profile");
+        toast.error("Failed to update profile", { style: toastStyle });
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating");
+      toast.error("An error occurred while updating", { style: toastStyle });
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#020617] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
+      <div className="page-ambient flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="w-7 h-7 animate-spin" style={{ color: "var(--accent)" }} />
+          <p className="text-sm" style={{ color: "var(--text-tertiary)", fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", letterSpacing: "0.06em" }}>
+            Loading profile...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white flex flex-col">
-      {/* <Navbar /> */}
+    <div className="page-ambient">
       <Toaster position="top-right" />
 
-      {/* Background Glows */}
-      <div className="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-[-100px] left-1/4 w-[600px] h-[400px] bg-indigo-500/8 blur-[150px] rounded-full" />
-        <div className="absolute bottom-[200px] right-[-100px] w-[500px] h-[300px] bg-purple-500/8 blur-[120px] rounded-full" />
-      </div>
+      <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 py-10 relative z-10 pt-12">
 
-      <main className="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 py-10 relative z-10 pt-28">
+        {/* Page title */}
+        <div className="mb-10">
+          <p
+            className="mb-3"
+            style={{
+              color: "var(--text-tertiary)",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "10px",
+              fontWeight: 600,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+            }}
+          >
+            Account
+          </p>
+          <h1
+            style={{
+              fontFamily: "'Syne', system-ui, sans-serif",
+              fontWeight: 800,
+              fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+              lineHeight: 1.05,
+              letterSpacing: "-0.025em",
+              color: "var(--text-primary)",
+            }}
+          >
+            Profile Settings
+          </h1>
+        </div>
+
         <div className="flex flex-col md:flex-row gap-8">
 
           {/* Sidebar */}
           <div className="w-full md:w-64 shrink-0">
-            <div className="glass-card p-4 rounded-2xl sticky top-28">
-              <h2 className="text-xl font-bold mb-6 px-2 text-white">Profile Settings</h2>
-              <nav className="space-y-1.5">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${activeTab === tab.id
-                        ? "bg-indigo-500/15 text-indigo-300 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.1)]"
-                        : "text-gray-400 hover:text-white hover:bg-white/5 border border-transparent"
-                      }`}
-                  >
-                    <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-indigo-400' : 'text-gray-500'}`} />
-                    {tab.label}
-                  </button>
-                ))}
+            <div
+              className="p-4 rounded-2xl sticky top-28"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              <nav className="space-y-1">
+                {tabs.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium cursor-pointer"
+                      style={{
+                        background: isActive ? "var(--accent-dim)" : "transparent",
+                        color: isActive ? "var(--accent)" : "var(--text-secondary)",
+                        border: isActive ? "1px solid rgba(232,117,74,0.18)" : "1px solid transparent",
+                        transition: "all 200ms cubic-bezier(0.23,1,0.32,1)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          const el = e.currentTarget as HTMLElement;
+                          el.style.background = "rgba(255,255,255,0.03)";
+                          el.style.color = "var(--text-primary)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          const el = e.currentTarget as HTMLElement;
+                          el.style.background = "transparent";
+                          el.style.color = "var(--text-secondary)";
+                        }
+                      }}
+                    >
+                      <Icon
+                        className="w-4 h-4"
+                        style={{ color: isActive ? "var(--accent)" : "var(--text-tertiary)" }}
+                      />
+                      {tab.label}
+                    </button>
+                  );
+                })}
               </nav>
             </div>
           </div>
 
           {/* Content Area */}
           <div className="flex-grow min-w-0">
-            <div className="glass-card p-6 md:p-8 rounded-2xl">
+            <div
+              className="p-6 md:p-8 rounded-2xl"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+              }}
+            >
               {activeTab === "basic" && (
                 <BasicInfoForm data={profileData} onSave={handleUpdate} />
               )}
@@ -136,12 +209,14 @@ export default function ProfileDashboard() {
               {activeTab === "achievements" && (
                 <AchievementsForm data={profileData?.achievements || []} onSave={(achievements: any) => handleUpdate({ achievements })} />
               )}
+              {activeTab === "research" && (
+                <ResearchForm data={profileData?.research || []} onSave={(research: any) => handleUpdate({ research })} />
+              )}
             </div>
           </div>
 
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

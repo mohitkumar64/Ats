@@ -24,6 +24,10 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
       name: data.name || "John Doe",
       email: data.email || "john.doe@example.com",
       summary: data.summary || "Experienced professional with a passion for building great products.",
+      phoneNumber: data.phoneNumber || "+91 1234567890",
+      githubLink: data.githubLink || "https://github.com/yourname",
+      linkedinLink: data.linkedinLink || "https://linkedin.com/in/yourname",
+      location: data.location || "City, Country",
       experience: data.experience?.length
         ? data.experience
         : [{ role: "Frontend Developer", company: "Tech Corp", duration: "2023 - Present", description: "Built scalable UI components." }],
@@ -68,8 +72,7 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
   };
 
   return (
-    // ✅ FIX: Use inline style container-type instead of @container Tailwind class
-    //    so the iframe scale transform (100cqw) works correctly.
+    
     <div
       ref={containerRef}
       className="w-full h-full relative bg-white rounded"

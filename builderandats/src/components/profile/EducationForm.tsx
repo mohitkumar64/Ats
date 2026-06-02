@@ -48,8 +48,8 @@ export default function EducationForm({ data, onSave }: EducationFormProps) {
     <form onSubmit={handleSubmit} className="space-y-8 text-white">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-2xl font-bold text-white flex items-center gap-2 mb-1">
-            <Book className="text-indigo-400 w-6 h-6" />
+          <h3 className="text-xl font-bold flex items-center gap-2 mb-1">
+            <Book className="w-5 h-5" style={{ color: "var(--accent)" }} />
             Education
           </h3>
           <p className="text-sm text-gray-400">Add your educational background.</p>
@@ -66,7 +66,7 @@ export default function EducationForm({ data, onSave }: EducationFormProps) {
 
       <div className="space-y-6">
         {educationList.map((edu, index) => (
-          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-indigo-500/30">
+          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-[rgba(232,117,74,0.18)]">
             <button
               type="button"
               onClick={() => handleRemove(index)}
@@ -78,56 +78,56 @@ export default function EducationForm({ data, onSave }: EducationFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Institution / University</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Institution / University</label>
                 <div className="relative">
-                  <Building2 className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Building2 className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={edu.institution}
                     onChange={(e) => handleChange(index, "institution", e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="Harvard University"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Degree</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Degree</label>
                 <div className="relative">
-                  <GraduationCap className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <GraduationCap className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={edu.degree}
                     onChange={(e) => handleChange(index, "degree", e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="Bachelor of Science"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Specialization / Major</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Specialization / Major</label>
                 <input
                   type="text"
                   value={edu.specialization}
                   onChange={(e) => handleChange(index, "specialization", e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                  className="input-field-plain"
                   placeholder="Computer Science"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Start & End Year</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Start & End Year</label>
                 <div className="flex items-center gap-3">
                   <div className="relative w-full">
-                    <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                    <Calendar className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                     <input
                       type="text"
                       value={edu.startYear}
                       onChange={(e) => handleChange(index, "startYear", e.target.value)}
-                      className="w-full pl-10 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white"
+                      className="input-field"
                       placeholder="2018"
                     />
                   </div>
@@ -136,30 +136,30 @@ export default function EducationForm({ data, onSave }: EducationFormProps) {
                     type="text"
                     value={edu.endYear}
                     onChange={(e) => handleChange(index, "endYear", e.target.value)}
-                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white"
+                    className="input-field-plain"
                     placeholder="2022 (or Present)"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">CGPA / Grade</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>CGPA / Grade</label>
                 <input
                   type="text"
                   value={edu.cgpa}
                   onChange={(e) => handleChange(index, "cgpa", e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                  className="input-field-plain"
                   placeholder="3.8 / 4.0"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Description / Activities</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Description / Activities</label>
                 <textarea
                   value={edu.description}
                   onChange={(e) => handleChange(index, "description", e.target.value)}
                   rows={3}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all resize-none"
+                  className="textarea-field"
                   placeholder="Relevant coursework, clubs, honors..."
                 />
               </div>
@@ -171,7 +171,7 @@ export default function EducationForm({ data, onSave }: EducationFormProps) {
       <button
         type="button"
         onClick={handleAdd}
-        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-indigo-500/50 hover:bg-indigo-500/5 rounded-2xl flex items-center justify-center gap-2 text-indigo-300 font-medium transition-all duration-300"
+        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-[rgba(232,117,74,0.30)] hover:bg-[rgba(232,117,74,0.03)] rounded-2xl flex items-center justify-center gap-2 text-[#E8754A] font-medium transition-all duration-300"
       >
         <Plus className="w-5 h-5" />
         Add Education

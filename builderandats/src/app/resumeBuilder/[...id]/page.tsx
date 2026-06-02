@@ -45,6 +45,10 @@ const ResumeBuilder = () => {
     name: "",
     email: "",
     summary: "",
+    githubLink: "",
+    linkedinLink: "",
+    phoneNumber: "",
+    location: "",
     experience: [
       {
         role: "",
@@ -146,13 +150,13 @@ const ResumeBuilder = () => {
   };
 
   return (
-    <div className='flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-[#020617] text-white'>
+    <div className='flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-[var(--bg)] text-white'>
 
       {/* ── Editor Sidebar ─────────────────────────────────────────────── */}
-      <div className='w-full md:w-[420px] lg:w-[480px] border-r border-white/10 bg-[#020617]/50 backdrop-blur-xl shadow-md flex flex-col h-full z-10'>
+      <div className='w-full md:w-[420px] lg:w-[480px] border-r border-white/10 bg-[var(--bg)]/50 backdrop-blur-xl shadow-md flex flex-col h-full z-10'>
 
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-white/10 bg-[#020617] sticky top-0 z-20">
+        <div className="px-6 pt-6 pb-4 border-b border-white/10 bg-[var(--bg)] sticky top-0 z-20">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-xs font-semibold text-primary uppercase tracking-widest">Resume Builder</span>
@@ -240,6 +244,46 @@ const ResumeBuilder = () => {
                   name="summary"
                   value={data.summary}
                   placeholder="Briefly describe your professional background and goals..."
+                  onChange={handleChange}
+                />
+              </FormField>
+               <FormField label="Phone Number" hint="Your contact phone number">
+                <input
+                  className={inputCls}
+                  type="tel"
+                  name="phoneNumber"
+                  value={data.phoneNumber}
+                  placeholder="e.g. (123) 456-7890"
+                  onChange={handleChange}
+                />
+              </FormField>
+              <FormField label="GitHub Link" hint="Your GitHub profile URL">
+                <input
+                  className={inputCls}
+                  type="url"
+                  name="githubLink"
+                  value={data.githubLink}
+                  placeholder="e.g. https://github.com/jane_doe"
+                  onChange={handleChange}
+                />
+              </FormField>
+              <FormField label="LinkedIn Link" hint="Your LinkedIn profile URL">
+                <input
+                  className={inputCls}
+                  type="url"
+                  name="linkedinLink"
+                  value={data.linkedinLink}
+                  placeholder="e.g. https://linkedin.com/in/jane-doe"
+                  onChange={handleChange}
+                />
+              </FormField>
+               <FormField label="Location" hint="Your current location">
+                <input
+                  className={inputCls}
+                  type="text"
+                  name="location"
+                  value={data.location}
+                  placeholder="e.g. New Delhi, CA"
                   onChange={handleChange}
                 />
               </FormField>
@@ -381,9 +425,9 @@ const ResumeBuilder = () => {
       </div>
 
       {/* ── Preview Area ───────────────────────────────────────────────── */}
-      <div className='flex-1 bg-[#020617] flex flex-col items-center justify-start overflow-auto relative'>
+      <div className='flex-1 bg-[var(--bg)] flex flex-col items-center justify-start overflow-auto relative'>
         {/* Preview header bar */}
-        <div className="w-full flex items-center justify-between px-6 py-3 bg-[#020617]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-10">
+        <div className="w-full flex items-center justify-between px-6 py-3 bg-[var(--bg)]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-10">
 
           {isLoadingTemplate ? (
             <span className="text-xs text-white/40 animate-pulse">Loading template…</span>

@@ -68,6 +68,12 @@ const userDataSchema = new mongoose.Schema({
         date: String,
         link: String
     }],
+    research: [{
+        title: String,
+        description: String, 
+        date: String,
+        link: String
+    }],
     
     // Notice: skipping projects section for now as per user instruction
 }, { timestamps: true })

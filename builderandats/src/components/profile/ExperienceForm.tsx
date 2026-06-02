@@ -62,8 +62,8 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
     <form onSubmit={handleSubmit} className="space-y-8 text-white">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-2xl font-bold text-white flex items-center gap-2 mb-1">
-            <Briefcase className="text-indigo-400 w-6 h-6" />
+          <h3 className="text-xl font-bold flex items-center gap-2 mb-1">
+            <Briefcase className="w-5 h-5" style={{ color: "var(--accent)" }} />
             Experience
           </h3>
           <p className="text-sm text-gray-400">Add your work experience.</p>
@@ -80,7 +80,7 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
 
       <div className="space-y-6">
         {experienceList.map((exp, index) => (
-          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-indigo-500/30">
+          <div key={index} className="p-6 bg-white/5 border border-white/10 rounded-2xl relative group transition-all duration-300 hover:border-[rgba(232,117,74,0.18)]">
             <button
               type="button"
               onClick={() => handleRemove(index)}
@@ -92,45 +92,45 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Company Name</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Company Name</label>
                 <div className="relative">
-                  <Building className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Building className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={exp.companyName}
                     onChange={(e) => handleChange(index, "companyName", e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="Tech Corp Inc."
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Role / Position</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Role / Position</label>
                 <div className="relative">
-                  <Briefcase className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                  <Briefcase className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                   <input
                     type="text"
                     value={exp.role}
                     onChange={(e) => handleChange(index, "role", e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                    className="input-field"
                     placeholder="Senior Frontend Developer"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Start & End Date</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Start & End Date</label>
                 <div className="flex items-center gap-3">
                   <div className="relative w-full">
-                    <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
+                    <Calendar className="absolute left-3.5 top-3 w-4 h-4" style={{ color: "var(--text-tertiary)" }} />
                     <input
                       type="text"
                       value={exp.startDate}
                       onChange={(e) => handleChange(index, "startDate", e.target.value)}
-                      className="w-full pl-10 pr-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white"
+                      className="input-field"
                       placeholder="Jan 2020"
                     />
                   </div>
@@ -140,7 +140,7 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
                     value={exp.endDate}
                     onChange={(e) => handleChange(index, "endDate", e.target.value)}
                     disabled={exp.current}
-                    className={`w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white ${exp.current ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`input-field-plain ${exp.current ? 'opacity-50 cursor-not-allowed' : ''}`}
                     placeholder="Present"
                   />
                 </div>
@@ -152,7 +152,7 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
                   id={`current-${index}`}
                   checked={exp.current}
                   onChange={(e) => handleChange(index, "current", e.target.checked)}
-                  className="w-4 h-4 text-indigo-500 bg-white/5 border-white/10 rounded focus:ring-indigo-500 focus:ring-offset-gray-900 cursor-pointer"
+                  className="w-4 h-4 rounded cursor-pointer accent-[#E8754A]"
                 />
                 <label htmlFor={`current-${index}`} className="ml-2 text-sm text-gray-400 cursor-pointer">
                   I currently work here
@@ -160,12 +160,12 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1.5">Job Description</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Job Description</label>
                 <textarea
                   value={exp.description}
                   onChange={(e) => handleChange(index, "description", e.target.value)}
                   rows={3}
-                  className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all resize-none"
+                  className="textarea-field"
                   placeholder="Describe your responsibilities..."
                 />
               </div>
@@ -179,21 +179,21 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
                   value={exp.achievements}
                   onChange={(e) => handleChange(index, "achievements", e.target.value)}
                   rows={2}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all resize-none"
+                  className="textarea-field"
                   placeholder="Increased revenue by 20%, Led team of 5 engineers..."
                 />
               </div>
 
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-400 mb-1.5 flex items-center gap-1.5">
-                  <Code className="w-3.5 h-3.5 text-blue-400" />
+                  <Code className="w-3.5 h-3.5 text-[#4ECCA3]" />
                   Technologies Used (Comma separated)
                 </label>
                 <input
                   type="text"
                   value={exp.technologies}
                   onChange={(e) => handleChange(index, "technologies", e.target.value)}
-                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none text-white transition-all"
+                  className="input-field-plain"
                   placeholder="React, Node.js, TypeScript, AWS..."
                 />
               </div>
@@ -205,7 +205,7 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
       <button
         type="button"
         onClick={handleAdd}
-        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-indigo-500/50 hover:bg-indigo-500/5 rounded-2xl flex items-center justify-center gap-2 text-indigo-300 font-medium transition-all duration-300"
+        className="w-full py-4 border-2 border-dashed border-white/10 hover:border-[rgba(232,117,74,0.30)] hover:bg-[rgba(232,117,74,0.03)] rounded-2xl flex items-center justify-center gap-2 text-[#E8754A] font-medium transition-all duration-300"
       >
         <Plus className="w-5 h-5" />
         Add Experience
