@@ -64,7 +64,12 @@ const ResumeBuilder = () => {
         description: ""
       }
     ],
-    skills: ""
+    skills: [
+      {
+        title : "" ,
+        names : ""
+      }
+    ]
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

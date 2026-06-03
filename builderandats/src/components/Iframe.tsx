@@ -32,7 +32,7 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
         ? data.experience
         : [{ role: "Frontend Developer", company: "Tech Corp", duration: "2023 - Present", description: "Built scalable UI components." }],
       projects: data.projects || [],
-      skills: data.skills || "JavaScript, React, Tailwind CSS",
+      skills: data.skills || [{ title: "Programming Languages", names: "JavaScript, TypeScript, Python" }],
     };
 
     const timer = setTimeout(() => {
