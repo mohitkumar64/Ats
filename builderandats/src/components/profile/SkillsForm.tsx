@@ -1,171 +1,82 @@
-import React, { useState } from "react";
-import { Code, Save, Loader2, Database, Wrench, Cloud, Users, Cpu, FileJson, Briefcase } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Code, Save, Loader2, Plus, Trash2 } from "lucide-react";
 
 interface SkillsFormProps {
   data: any;
   onSave: (data: any) => Promise<void>;
 }
 
-const COMMON_NON_TECHNICAL_SKILLS = [
-  "Communication",
-  "Leadership",
-  "Team Management",
-  "Project Management",
-  "Customer Service",
-  "Problem Solving",
-  "Critical Thinking",
-  "Time Management",
-  "Negotiation",
-  "Decision Making",
-  "Organizational Skills",
-  "Public Speaking",
-  "Writing & Documentation",
-
-  // Business & Management
-  "Strategic Planning",
-  "Business Development",
-  "Stakeholder Management",
-  "Operations Management",
-  "Risk Management",
-  "Budget Management",
-  "Conflict Resolution",
-  "Process Improvement",
-
-  // HR & Administration
-  "Recruitment",
-  "Talent Acquisition",
-  "Employee Relations",
-  "Performance Management",
-  "Training & Development",
-  "Office Administration",
-
-  // Sales & Marketing
-  "Sales",
-  "Market Research",
-  "Brand Management",
-  "Digital Marketing",
-  "Content Creation",
-  "Customer Relationship Management",
-  "Client Management",
-
-  // Education & Training
-  "Teaching",
-  "Curriculum Development",
-  "Mentoring",
-  "Student Counseling",
-  "Classroom Management",
-
-  // Legal
-  "Legal Research",
-  "Case Analysis",
-  "Contract Drafting",
-  "Compliance Management",
-
-  // Healthcare
-  "Medical Knowledge",
-  "Patient Care",
-  "Clinical Skills",
-  "Healthcare Administration",
-  "Counseling",
-
-  // General Professional Skills
-  "Adaptability",
-  "Attention to Detail",
-  "Emotional Intelligence",
-  "Interpersonal Skills",
-  "Multitasking",
-  "Networking",
-  "Presentation Skills",
-  "Research Skills",
-  "Analytical Thinking",
-  "Event Management",
-  "Cross-functional Collaboration",
-  "Relationship Building"
-];
-
 export default function SkillsForm({ data, onSave }: SkillsFormProps) {
-  const [activeTab, setActiveTab] = useState<"technical" | "nonTechnical">("technical");
-  const [activeSubTab, setActiveSubTab] = useState<"common" | "other">("common");
   const [saving, setSaving] = useState(false);
+  const [categories, setCategories] = useState<{ id: string; name: string; value: string }[]>([]);
 
-  const [formData, setFormData] = useState({
-    technical: {
-      languages: Array.isArray(data?.technical?.languages) ? data.technical.languages.join(", ") : "",
-      frameworks: Array.isArray(data?.technical?.frameworks) ? data.technical.frameworks.join(", ") : "",
-      tools: Array.isArray(data?.technical?.tools) ? data.technical.tools.join(", ") : "",
-      databases: Array.isArray(data?.technical?.databases) ? data.technical.databases.join(", ") : "",
-      softSkills: Array.isArray(data?.technical?.softSkills) ? data.technical.softSkills.join(", ") : "",
-      cloud: Array.isArray(data?.technical?.cloud) ? data.technical.cloud.join(", ") : "",
-      devops: Array.isArray(data?.technical?.devops) ? data.technical.devops.join(", ") : "",
-    },
-    nonTechnical: {
-      commonSkills: Array.isArray(data?.nonTechnical?.commonSkills) ? data.nonTechnical.commonSkills : [],
-      otherSkills: Array.isArray(data?.nonTechnical?.otherSkills) ? data.nonTechnical.otherSkills.join(", ") : "",
-    },
-  });
+  // Initialize from data prop
+  useEffect(() => {
+    if (data) {
+      // If data is in Map/Object format (Record<string, string[]>)
+      if (typeof data === "object" && data !== null && !Array.isArray(data)) {
+        // Safe check to avoid rendering Map prototype or other non-plain objects improperly
+        const entries = data instanceof Map ? Array.from(data.entries()) : Object.entries(data);
+        const parsed = entries.map(([key, val]) => ({
+          id: Math.random().toString(36).substring(7),
+          name: key,
+          value: Array.isArray(val) ? val.join(", ") : String(val),
+        }));
+        setCategories(parsed);
+      } else {
+        // If data is empty or in a legacy format
+        setCategories([]);
+      }
+    }
+  }, [data]);
 
-  const handleTechnicalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      technical: { ...formData.technical, [e.target.name]: e.target.value },
-    });
-  };
-
-  const handleCommonSkillToggle = (skill: string) => {
-    setFormData({
-      ...formData,
-      nonTechnical: {
-        ...formData.nonTechnical,
-        commonSkills: formData.nonTechnical.commonSkills.includes(skill)
-          ? formData.nonTechnical.commonSkills.filter((s: string) => s !== skill)
-          : [...formData.nonTechnical.commonSkills, skill],
+  const handleAddCategory = () => {
+    setCategories([
+      ...categories,
+      {
+        id: Math.random().toString(36).substring(7),
+        name: "",
+        value: "",
       },
-    });
+    ]);
   };
 
-  const handleOtherSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      nonTechnical: { ...formData.nonTechnical, otherSkills: e.target.value },
-    });
+  const handleRemoveCategory = (id: string) => {
+    setCategories(categories.filter((cat) => cat.id !== id));
+  };
+
+  const handleCategoryChange = (id: string, field: "name" | "value", val: string) => {
+    setCategories(
+      categories.map((cat) => {
+        if (cat.id === id) {
+          return { ...cat, [field]: val };
+        }
+        return cat;
+      })
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
-    const formattedData = {
-      technical: {
-        languages: formData.technical.languages.split(",").map((i: string) => i.trim()).filter(Boolean),
-        frameworks: formData.technical.frameworks.split(",").map((i: string) => i.trim()).filter(Boolean),
-        tools: formData.technical.tools.split(",").map((i: string) => i.trim()).filter(Boolean),
-        databases: formData.technical.databases.split(",").map((i: string) => i.trim()).filter(Boolean),
-        softSkills: formData.technical.softSkills.split(",").map((i: string) => i.trim()).filter(Boolean),
-        cloud: formData.technical.cloud.split(",").map((i: string) => i.trim()).filter(Boolean),
-        devops: formData.technical.devops.split(",").map((i: string) => i.trim()).filter(Boolean),
-      },
-      nonTechnical: {
-        commonSkills: formData.nonTechnical.commonSkills,
-        otherSkills: formData.nonTechnical.otherSkills.split(",").map((i: string) => i.trim()).filter(Boolean),
-      },
-    };
+    const formattedData: Record<string, string[]> = {};
+    categories.forEach((cat) => {
+      const trimmedName = cat.name.trim();
+      if (trimmedName) {
+        formattedData[trimmedName] = cat.value
+          .split(",")
+          .map((i) => i.trim())
+          .filter(Boolean);
+      }
+    });
 
     await onSave(formattedData);
     setSaving(false);
   };
 
-  const technicalCategories = [
-    { name: "languages", label: "Programming Languages", icon: Code, placeholder: "JavaScript, Python, C++" },
-    { name: "frameworks", label: "Frameworks & Libraries", icon: FileJson, placeholder: "React, Node.js, Django" },
-    { name: "databases", label: "Databases", icon: Database, placeholder: "MongoDB, PostgreSQL, Redis" },
-    { name: "cloud", label: "Cloud Platforms", icon: Cloud, placeholder: "AWS, GCP, Azure" },
-    { name: "devops", label: "DevOps & CI/CD", icon: Cpu, placeholder: "Docker, Kubernetes, GitHub Actions" },
-    { name: "tools", label: "Developer Tools", icon: Wrench, placeholder: "Git, VS Code, Postman" },
-    { name: "softSkills", label: "Soft Skills", icon: Users, placeholder: "Leadership, Communication, Teamwork" },
-  ];
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 text-white">
+    <form onSubmit={handleSubmit} className="space-y-6 text-white">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-xl font-bold flex items-center gap-2 mb-1">
@@ -173,9 +84,7 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
             Skills
           </h3>
           <p className="text-sm text-gray-400">
-            {activeTab === "technical"
-              ? "Add your technical and soft skills (comma separated)."
-              : "Add non-technical skills relevant to your profession."}
+            Organize your skills by categories (e.g. Front End, Backend, Databases) and enter their values.
           </p>
         </div>
         <button
@@ -188,130 +97,79 @@ export default function SkillsForm({ data, onSave }: SkillsFormProps) {
         </button>
       </div>
 
-      {/* Main Tabs */}
-      <div className="flex gap-3 border-b border-white/10 mb-6">
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab("technical");
-            setActiveSubTab("common");
-          }}
-          className={`px-4 py-3 text-sm font-medium transition-all flex items-center gap-2 ${
-            activeTab === "technical"
-              ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
-              : "text-gray-400 hover:text-white"
-          }`}
-        >
-          <Code className="w-4 h-4" />
-          Technical Skills
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab("nonTechnical");
-            setActiveSubTab("common");
-          }}
-          className={`px-4 py-3 text-sm font-medium transition-all flex items-center gap-2 ${
-            activeTab === "nonTechnical"
-              ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
-              : "text-gray-400 hover:text-white"
-          }`}
-        >
-          <Briefcase className="w-4 h-4" />
-          Non-Technical Skills
-        </button>
-      </div>
-
-      {/* Technical Skills Tab */}
-      {activeTab === "technical" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {technicalCategories.map((cat, index) => (
-            <div key={index} className={cat.name === "softSkills" ? "md:col-span-2" : ""}>
-              <label className="block text-sm font-medium text-gray-400 mb-1.5 flex items-center gap-2">
-                <cat.icon className="w-4 h-4 text-[var(--accent)]" />
-                {cat.label}
-              </label>
-              <input
-                type="text"
-                name={cat.name}
-                value={(formData.technical as any)[cat.name]}
-                onChange={handleTechnicalChange}
-                className="input-field-plain"
-                placeholder={cat.placeholder}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Non-Technical Skills Tab */}
-      {activeTab === "nonTechnical" && (
-        <div className="space-y-6">
-          {/* Sub Tabs */}
-          <div className="flex gap-2 border-b border-white/10 pb-4">
+      <div className="space-y-4">
+        {categories.length === 0 ? (
+          <div className="text-center py-12 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] text-gray-400">
+            <Code className="w-8 h-8 mx-auto mb-3 opacity-40 text-[var(--accent)]" />
+            <p className="text-sm mb-4">No skill categories added yet.</p>
             <button
               type="button"
-              onClick={() => setActiveSubTab("common")}
-              className={`px-3 py-2 text-sm font-medium transition-all ${
-                activeSubTab === "common"
-                  ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
-                  : "text-gray-400 hover:text-white"
-              }`}
+              onClick={handleAddCategory}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl text-sm text-white transition-all duration-300"
             >
-              Common Skills
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveSubTab("other")}
-              className={`px-3 py-2 text-sm font-medium transition-all ${
-                activeSubTab === "other"
-                  ? "text-[var(--accent)] border-b-2 border-[#E8754A]"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              Other Skills
+              <Plus className="w-4 h-4" />
+              Add Category
             </button>
           </div>
-
-          {/* Common Skills Sub-Tab */}
-          {activeSubTab === "common" && (
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-4">Select common skills:</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {COMMON_NON_TECHNICAL_SKILLS.map((skill) => (
-                  <label
-                    key={skill}
-                    className="flex items-center gap-2 p-3 rounded-lg border border-white/10 hover:border-[rgba(232,117,74,0.25)] hover:bg-[rgba(232,117,74,0.03)] cursor-pointer transition-all"
+        ) : (
+          <>
+            <div className="space-y-4">
+              {categories.map((cat, index) => (
+                <div
+                  key={cat.id}
+                  className="flex flex-col md:flex-row gap-4 p-5 rounded-2xl border border-white/10 bg-white/[0.02] relative group hover:border-[rgba(232,117,74,0.18)] transition-all duration-300"
+                >
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveCategory(cat.id)}
+                    className="absolute top-4 right-4 p-2 bg-red-500/10 text-red-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/20 z-10 md:static md:opacity-100 md:self-end md:mb-1"
+                    title="Remove Category"
                   >
-                    <input
-                      type="checkbox"
-                      checked={formData.nonTechnical.commonSkills.includes(skill)}
-                      onChange={() => handleCommonSkillToggle(skill)}
-                      className="w-4 h-4 accent-[#E8754A] cursor-pointer"
-                    />
-                    <span className="text-sm text-gray-300">{skill}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
+                    <Trash2 className="w-4 h-4" />
+                  </button>
 
-          {/* Other Skills Sub-Tab */}
-          {activeSubTab === "other" && (
-            <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>Add other skills (comma separated):</label>
-              <input
-                type="text"
-                name="otherSkills"
-                value={formData.nonTechnical.otherSkills}
-                onChange={handleOtherSkillsChange}
-                className="input-field-plain"
-                placeholder="e.g., Litigation, Pediatrics, Legal Writing"
-              />
+                  <div className="flex-1 space-y-1.5">
+                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>
+                      Category
+                    </label>
+                    <input
+                      type="text"
+                      value={cat.name}
+                      onChange={(e) => handleCategoryChange(cat.id, "name", e.target.value)}
+                      placeholder="e.g. Front End, Databases"
+                      className="input-field-plain"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex-[2] space-y-1.5">
+                    <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--text-secondary)" }}>
+                      Skills
+                    </label>
+                    <input
+                      type="text"
+                      value={cat.value}
+                      onChange={(e) => handleCategoryChange(cat.id, "value", e.target.value)}
+                      placeholder="e.g. React, HTML, CSS (comma separated)"
+                      className="input-field-plain"
+                      required
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-      )}
+
+            <button
+              type="button"
+              onClick={handleAddCategory}
+              className="w-full py-4 border-2 border-dashed border-white/10 hover:border-[rgba(232,117,74,0.30)] hover:bg-[rgba(232,117,74,0.03)] rounded-2xl flex items-center justify-center gap-2 text-[#E8754A] font-medium transition-all duration-300"
+            >
+              <Plus className="w-5 h-5" />
+              Add Category
+            </button>
+          </>
+        )}
+      </div>
     </form>
   );
 }

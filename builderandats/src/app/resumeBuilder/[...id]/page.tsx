@@ -63,14 +63,12 @@ const ResumeBuilder = () => {
         link: "",
         description: ""
       }
-    ],
-    skills: [
-      {
-        title : "" ,
-        names : ""
-      }
     ]
   });
+
+  const [skillsList, setSkillsList] = useState<{ id: string; category: string; values: string }[]>([
+    { id: "1", category: "Programming Languages", values: "JavaScript, TypeScript, Python" }
+  ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -130,7 +128,9 @@ const ResumeBuilder = () => {
       case "Projects":
         return data.projects.every((p) => p.title.trim() !== "" && p.description.trim() !== "");
       case "Skills":
-        return data.skills.trim() !== "";
+        return skillsList.length > 0 && skillsList.every(
+          (item) => item.category.trim() !== "" && item.values.trim() !== ""
+        );
       default:
         return true;
     }
@@ -153,6 +153,17 @@ const ResumeBuilder = () => {
     setShowError(false);
     setActiveTab(nextTab);
   };
+
+  const formattedSkills = React.useMemo(() => {
+    const skillsObj: Record<string, string[]> = {};
+    skillsList.forEach(item => {
+      const cat = item.category.trim();
+      if (cat) {
+        skillsObj[cat] = item.values.split(",").map(v => v.trim()).filter(Boolean);
+      }
+    });
+    return skillsObj;
+  }, [skillsList]);
 
   return (
     <div className='flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-[var(--bg)] text-white'>
@@ -403,15 +414,64 @@ const ResumeBuilder = () => {
                 </svg>
                 Separate skills with commas for best formatting.
               </div>
-              <FormField label="Your Skills">
-                <textarea
-                  className={`${inputCls} min-h-[140px] resize-y`}
-                  name="skills"
-                  value={data.skills}
-                  placeholder="e.g. React, TypeScript, Node.js, Figma, SQL..."
-                  onChange={handleChange}
-                />
-              </FormField>
+
+              <div className="space-y-4">
+                {skillsList.map((item, index) => (
+                  <div key={item.id} className="bg-white/5 p-4 rounded-xl border border-white/10 shadow-sm space-y-3 relative hover:border-white/20 transition-all">
+                    <div className="flex justify-between items-center">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider">
+                        <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] flex items-center justify-center font-bold">{index + 1}</span>
+                        Skill Category
+                      </span>
+                      {skillsList.length > 1 && (
+                        <button
+                          onClick={() => setSkillsList(skillsList.filter(s => s.id !== item.id))}
+                          className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-2 py-1 rounded-md transition-colors font-medium"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    
+                    <FormField label="Category">
+                      <input
+                        className={inputSmCls}
+                        type="text"
+                        value={item.category}
+                        placeholder="e.g. Front End"
+                        onChange={(e) => {
+                          const updated = skillsList.map(s => s.id === item.id ? { ...s, category: e.target.value } : s);
+                          setSkillsList(updated);
+                        }}
+                      />
+                    </FormField>
+
+                    <FormField label="Skills">
+                      <input
+                        className={inputSmCls}
+                        type="text"
+                        value={item.values}
+                        placeholder="e.g. React, HTML, CSS"
+                        onChange={(e) => {
+                          const updated = skillsList.map(s => s.id === item.id ? { ...s, values: e.target.value } : s);
+                          setSkillsList(updated);
+                        }}
+                      />
+                    </FormField>
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => setSkillsList([...skillsList, { id: Math.random().toString(36).substring(7), category: "", values: "" }])}
+                  className="w-full py-3 border-2 border-dashed border-primary/20 text-primary/70 text-sm font-medium rounded-xl hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all flex items-center justify-center gap-2"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  Add Skills Category
+                </button>
+              </div>
 
               <div className="pt-2 flex justify-between items-center">
                 <button onClick={() => setActiveTab("Projects")} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
@@ -454,7 +514,7 @@ const ResumeBuilder = () => {
               aspectRatio: '794 / 1123',
             }}
           >
-            <IframeRender Stringhtml={templateData.html ?? ""} data={data} />
+            <IframeRender Stringhtml={templateData.html ?? ""} data={{ ...data, skills: formattedSkills }} />
           </div>
         </div>
       </div>

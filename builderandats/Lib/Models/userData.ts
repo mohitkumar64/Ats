@@ -31,19 +31,9 @@ const userDataSchema = new mongoose.Schema({
         description: String
     }],
     skills: {
-        technical: {
-            languages: [String],
-            frameworks: [String],
-            tools: [String],
-            databases: [String],
-            softSkills: [String],
-            cloud: [String],
-            devops: [String]
-        },
-        nonTechnical: {
-            commonSkills: [String],
-            otherSkills: [String]
-        }
+        type: Map,
+        of: [String],
+        default: {}
     },
     experience: [{
         companyName: String,

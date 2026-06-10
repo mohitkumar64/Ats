@@ -32,7 +32,14 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
         ? data.experience
         : [{ role: "Frontend Developer", company: "Tech Corp", duration: "2023 - Present", description: "Built scalable UI components." }],
       projects: data.projects || [],
-      skills: data.skills || [{ title: "Programming Languages", names: "JavaScript, TypeScript, Python" }],
+      skills: data.skills
+        ? (typeof data.skills === "object" && !Array.isArray(data.skills)
+            ? Object.entries(data.skills).map(([category, list]) => ({
+                title: category,
+                names: Array.isArray(list) ? list.join(", ") : String(list),
+              }))
+            : data.skills)
+        : [{ title: "Programming Languages", names: "JavaScript, TypeScript, Python" }],
     };
 
     const timer = setTimeout(() => {

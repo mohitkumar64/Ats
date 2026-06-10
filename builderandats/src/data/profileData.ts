@@ -20,18 +20,7 @@ export interface ProfileData {
     endYear: string;
     coursework: string[];
   }[];
-  skills: {
-    technical: {
-      languages: { name: string; level: number }[];
-      frameworks: string[];
-      tools: string[];
-    };
-    soft: string[];
-    nonTechnical?: {
-      commonSkills: string[];
-      otherSkills: string[];
-    };
-  };
+  skills: Record<string, string[]>;
   experience: {
     company: string;
     role: string;
@@ -95,49 +84,10 @@ export const profileData: ProfileData = {
     },
   ],
   skills: {
-    technical: {
-      languages: [
-        { name: "JavaScript", level: 90 },
-        { name: "TypeScript", level: 85 },
-        { name: "Python", level: 75 },
-        { name: "C++", level: 70 },
-        { name: "Java", level: 65 },
-      ],
-      frameworks: [
-        "React.js",
-        "Next.js",
-        "Node.js",
-        "Express.js",
-        "Tailwind CSS",
-        "MongoDB",
-        "PostgreSQL",
-        "Prisma",
-        "Redux",
-        "Socket.io",
-      ],
-      tools: [
-        "Git & GitHub",
-        "Docker",
-        "VS Code",
-        "Postman",
-        "Figma",
-        "Vercel",
-        "AWS",
-        "Linux",
-      ],
-    },
-    soft: [
-      "Problem Solving",
-      "Team Collaboration",
-      "Communication",
-      "Leadership",
-      "Time Management",
-      "Adaptability",
-    ],
-    nonTechnical: {
-      commonSkills: ["Leadership", "Communication", "Project Management"],
-      otherSkills: ["Innovation", "Strategic Planning"],
-    },
+    "Programming Languages": ["JavaScript", "TypeScript", "Python", "C++", "Java"],
+    "Frameworks & Libraries": ["React.js", "Next.js", "Node.js", "Express.js", "Tailwind CSS", "MongoDB", "PostgreSQL", "Prisma", "Redux", "Socket.io"],
+    "Developer Tools": ["Git & GitHub", "Docker", "VS Code", "Postman", "Figma", "Vercel", "AWS", "Linux"],
+    "Soft Skills": ["Problem Solving", "Team Collaboration", "Communication", "Leadership", "Time Management", "Adaptability"]
   },
   experience: [
     {
