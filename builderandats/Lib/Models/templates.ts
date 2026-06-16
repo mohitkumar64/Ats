@@ -8,9 +8,11 @@ const templateSchema = new mongoose.Schema({
     layoutInfo: {
         maxProject: Number,
         maxExperience: Number,
+    },
+    supportedFields: {
+        type: [String],
+        default: ["summary", "phoneNumber", "location", "githubLink", "linkedinLink", "experience", "projects", "skills"]
     }
-
-
 })
 
 export const Template = mongoose.models.Template || mongoose.model("Template", templateSchema)

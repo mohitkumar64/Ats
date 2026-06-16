@@ -68,7 +68,7 @@ export default function BasicInfoForm({ data, onSave }: BasicInfoFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex sm:flex-nowrap items-center justify-between mb-2">
         <h3
           className="text-xl font-bold flex items-center gap-2.5"
           style={{ fontFamily: "'Syne', system-ui, sans-serif", color: "var(--text-primary)" }}
@@ -79,16 +79,16 @@ export default function BasicInfoForm({ data, onSave }: BasicInfoFormProps) {
         <button
           type="submit"
           disabled={saving}
-          className="btn-primary px-5 py-2.5 text-sm flex items-center gap-2"
+          className="btn-primary  lg:m-0  px-4 sm:px-5 py-2.5 text-sm flex items-center gap-2"
         >
-          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          Save Changes
+          {saving ? <Loader2 className=" w-2 h-2 lg:w-4 lg:h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          <span className="hidden sm:flex">Save Changes</span>
         </button>
       </div>
 
       {/* Profile Image */}
       <div
-        className="flex items-center gap-6 p-5 rounded-2xl"
+        className="flex items-center gap-6 p-2 sm:p-3 md:p-5 rounded-2xl"
         style={{
           background: "rgba(255,255,255,0.02)",
           border: "1px solid var(--border)",
@@ -125,7 +125,7 @@ export default function BasicInfoForm({ data, onSave }: BasicInfoFormProps) {
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 cursor-pointer"
+            className=" px-1 md:px-4 py-2 rounded-xl text-[12px]   sm:text-sm font-medium flex items-center  gap-2 cursor-pointer"
             style={{
               background: "var(--accent-dim)",
               border: "1px solid rgba(232,117,74,0.18)",

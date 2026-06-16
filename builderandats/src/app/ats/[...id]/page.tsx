@@ -120,17 +120,7 @@ const AtsResponse = () => {
       {/* Hero */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-12 grid lg:grid-cols-2 gap-12 items-center">
         <div>
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8"
-            style={{
-              border: "1px solid rgba(232,117,74,0.18)",
-              background: "var(--accent-dim)",
-              color: "var(--accent)",
-            }}
-          >
-            <Sparkles className="w-4 h-4" />
-            AI Resume Intelligence
-          </div>
+
 
           <h1 className="text-5xl md:text-6xl font-black leading-tight">
             ATS Analysis <br />

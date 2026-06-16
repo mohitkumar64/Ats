@@ -18,6 +18,16 @@ export async function POST(req: NextRequest) {
         const img = data.get("img") as File | null;
         const html = data.get("html") as string | null;
         const name = data.get("name") as string | null;
+        const supportedFieldsJson = data.get("supportedFields") as string | null;
+
+        let supportedFields: string[] | undefined = undefined;
+        if (supportedFieldsJson) {
+            try {
+                supportedFields = JSON.parse(supportedFieldsJson);
+            } catch (e) {
+                console.error("Failed to parse supportedFields:", e);
+            }
+        }
 
         // validation
         if (!img || !html || !name) {
@@ -38,6 +48,7 @@ export async function POST(req: NextRequest) {
             name,
             html,
             img: cloudinaryResult.secure_url,
+            ...(supportedFields && { supportedFields }),
         })
 
 

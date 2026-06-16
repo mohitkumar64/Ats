@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { UploadCloud, Image as ImageIcon, FileCode, Type, X } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, FileCode, Type, X, ShieldCheck } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 const AdminPage = () => {
@@ -12,6 +12,28 @@ const AdminPage = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const imgRef = useRef(null);
   const htmlRef = useRef<HTMLInputElement>(null);
+
+  const [supportedFields, setSupportedFields] = useState({
+    summary: true,
+    phoneNumber: true,
+    location: true,
+    githubLink: true,
+    linkedinLink: true,
+    experience: true,
+    projects: true,
+    skills: true,
+  });
+
+  const fieldsConfig = [
+    { key: "summary", label: "Summary", desc: "Professional Summary" },
+    { key: "phoneNumber", label: "Phone", desc: "Contact Phone" },
+    { key: "location", label: "Location", desc: "City, Country" },
+    { key: "githubLink", label: "GitHub", desc: "GitHub Link" },
+    { key: "linkedinLink", label: "LinkedIn", desc: "LinkedIn Link" },
+    { key: "experience", label: "Experience", desc: "Work Experience" },
+    { key: "projects", label: "Projects", desc: "Projects list" },
+    { key: "skills", label: "Skills", desc: "Skills categories" },
+  ];
 
 
   const handleDrag = (e: React.DragEvent) => {
@@ -54,6 +76,10 @@ const AdminPage = () => {
     }
     formData.append("name", fileName);
     formData.append("html", htmlString);
+    formData.append("supportedFields", JSON.stringify(
+      Object.keys(supportedFields).filter(key => supportedFields[key as keyof typeof supportedFields])
+    ));
+
     try {
       const res = await fetch("/api/uploadTemplate", {
         method: "POST",
@@ -65,6 +91,16 @@ const AdminPage = () => {
         setFilePreview(null);
         setSelectedImage(null);
         setFileName("");
+        setSupportedFields({
+          summary: true,
+          phoneNumber: true,
+          location: true,
+          githubLink: true,
+          linkedinLink: true,
+          experience: true,
+          projects: true,
+          skills: true,
+        });
       } else {
         toast.error(data.message);
         setFilePreview(null);
@@ -202,6 +238,61 @@ const AdminPage = () => {
 
 
               </div>
+            </div>
+          </div>
+
+          {/* Supported Fields Checklist */}
+          <div className="space-y-4">
+            <label className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <ShieldCheck size={16} className="text-primary" />
+              Supported Template Fields
+            </label>
+            <p className="text-xs text-foreground/50 -mt-2">
+              Uncheck fields that are NOT supported/styled in this template's HTML structure. Unsupported sections will be hidden from the user's resume editor.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {fieldsConfig.map((field) => {
+                const isChecked = supportedFields[field.key as keyof typeof supportedFields];
+                return (
+                  <label
+                    key={field.key}
+                    className={`flex flex-col justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
+                      isChecked
+                        ? "border-primary/50 bg-primary/5 text-foreground"
+                        : "border-border bg-background/50 hover:bg-background text-foreground/60"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold">{field.label}</span>
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={(e) =>
+                          setSupportedFields((prev) => ({
+                            ...prev,
+                            [field.key]: e.target.checked,
+                          }))
+                        }
+                        className="sr-only"
+                      />
+                      <div
+                        className={`w-4.5 h-4.5 rounded flex items-center justify-center border transition-all ${
+                          isChecked
+                            ? "bg-primary border-primary text-white"
+                            : "border-border bg-transparent"
+                        }`}
+                      >
+                        {isChecked && (
+                          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">
+                            <path d="M20 6L9 17l-5-5" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    <span className="text-[10px] text-foreground/45 mt-1">{field.desc}</span>
+                  </label>
+                );
+              })}
             </div>
           </div>
 

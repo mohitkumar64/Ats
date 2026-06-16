@@ -9,6 +9,7 @@ interface TemplateData {
   html?: string;
   name?: string;
   img?: string;
+  supportedFields?: string[];
   layoutInfo?: {
     maxProject?: number;
     maxExperience?: number;
@@ -20,7 +21,26 @@ const ResumeBuilder = () => {
   const [templateData, setTemplateData] = useState<TemplateData>({});
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(true);
   const [activeTab, setActiveTab] = useState("Personal Details");
-  const tabs = ["Personal Details", "Experience", "Projects", "Skills"];
+  const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
+
+  const isFieldSupported = (field: string) => {
+    if (!templateData || !templateData.supportedFields) return true;
+    return templateData.supportedFields.includes(field);
+  };
+
+  const tabs = React.useMemo(() => {
+    const list = ["Personal Details"];
+    if (isFieldSupported("experience")) list.push("Experience");
+    if (isFieldSupported("projects")) list.push("Projects");
+    if (isFieldSupported("skills")) list.push("Skills");
+    return list;
+  }, [templateData]);
+
+  useEffect(() => {
+    if (tabs.length > 0 && !tabs.includes(activeTab)) {
+      setActiveTab(tabs[0]);
+    }
+  }, [tabs, activeTab]);
 
   async function getTemplate() {
     try {
@@ -93,7 +113,11 @@ const ResumeBuilder = () => {
   };
 
   const addListItem = (sectionKey: 'experience' | 'projects') => {
-    if (data[sectionKey].length >= 3) return;
+    const maxLimit = sectionKey === 'experience'
+      ? (templateData.layoutInfo?.maxExperience ?? 3)
+      : (templateData.layoutInfo?.maxProject ?? 3);
+
+    if (data[sectionKey].length >= maxLimit) return;
     setData(prev => {
       const newItem = sectionKey === 'experience'
         ? { role: "", company: "", duration: "", description: "" }
@@ -120,7 +144,9 @@ const ResumeBuilder = () => {
   const isTabValid = (tab: string): boolean => {
     switch (tab) {
       case "Personal Details":
-        return data.name.trim() !== "" && data.email.trim() !== "" && data.summary.trim() !== "";
+        return data.name.trim() !== "" && 
+               data.email.trim() !== "" && 
+               (isFieldSupported("summary") ? data.summary.trim() !== "" : true);
       case "Experience":
         return data.experience.every(
           (e) => e.role.trim() !== "" && e.company.trim() !== "" && e.duration.trim() !== ""
@@ -169,7 +195,7 @@ const ResumeBuilder = () => {
     <div className='flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-[var(--bg)] text-white'>
 
       {/* ── Editor Sidebar ─────────────────────────────────────────────── */}
-      <div className='w-full md:w-[420px] lg:w-[480px] border-r border-white/10 bg-[var(--bg)]/50 backdrop-blur-xl shadow-md flex flex-col h-full z-10'>
+      <div className={`w-full md:w-[420px] lg:w-[480px] border-r border-white/10 bg-[var(--bg)]/50 backdrop-blur-xl shadow-md flex flex-col h-full z-10 ${mobileView === "edit" ? "flex" : "hidden md:flex"}`}>
 
         {/* Header */}
         <div className="px-6 pt-6 pb-4 border-b border-white/10 bg-[var(--bg)] sticky top-0 z-20">
@@ -254,68 +280,89 @@ const ResumeBuilder = () => {
                   onChange={handleChange}
                 />
               </FormField>
-              <FormField label="Professional Summary" hint="A brief 2-3 sentence overview of your career.">
-                <textarea
-                  className={`${inputCls} min-h-[110px] resize-y`}
-                  name="summary"
-                  value={data.summary}
-                  placeholder="Briefly describe your professional background and goals..."
-                  onChange={handleChange}
+              {isFieldSupported("summary") && (
+                <FormField label="Professional Summary" hint="A brief 2-3 sentence overview of your career.">
+                  <textarea
+                    className={`${inputCls} min-h-[110px] resize-y`}
+                    name="summary"
+                    value={data.summary}
+                    placeholder="Briefly describe your professional background and goals..."
+                    onChange={handleChange}
+                  />
+                </FormField>
+              )}
+              {isFieldSupported("phoneNumber") && (
+                <FormField label="Phone Number" hint="Your contact phone number">
+                  <input
+                    className={inputCls}
+                    type="tel"
+                    name="phoneNumber"
+                    value={data.phoneNumber}
+                    placeholder="e.g. (123) 456-7890"
+                    onChange={handleChange}
+                  />
+                </FormField>
+              )}
+              {isFieldSupported("githubLink") && (
+                <FormField label="GitHub Link" hint="Your GitHub profile URL">
+                  <input
+                    className={inputCls}
+                    type="url"
+                    name="githubLink"
+                    value={data.githubLink}
+                    placeholder="e.g. https://github.com/jane_doe"
+                    onChange={handleChange}
+                  />
+                </FormField>
+              )}
+              {isFieldSupported("linkedinLink") && (
+                <FormField label="LinkedIn Link" hint="Your LinkedIn profile URL">
+                  <input
+                    className={inputCls}
+                    type="url"
+                    name="linkedinLink"
+                    value={data.linkedinLink}
+                    placeholder="e.g. https://linkedin.com/in/jane-doe"
+                    onChange={handleChange}
+                  />
+                </FormField>
+              )}
+              {isFieldSupported("location") && (
+                <FormField label="Location" hint="Your current location">
+                  <input
+                    className={inputCls}
+                    type="text"
+                    name="location"
+                    value={data.location}
+                    placeholder="e.g. New Delhi, CA"
+                    onChange={handleChange}
+                  />
+                </FormField>
+              )}
+              {tabs.length === 1 ? (
+                <div className="pt-4 flex justify-end">
+                  <div className="flex items-center gap-2 px-5 py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Looking great! Download below ↓
+                  </div>
+                </div>
+              ) : (
+                <NavButtons
+                  onNext={() => handleNext(tabs[1])}
+                  nextLabel={tabs[1]}
+                  showError={showError && activeTab === "Personal Details"}
+                  errorMsg={isFieldSupported("summary") ? "Please fill in your name, email, and summary." : "Please fill in your name and email."}
                 />
-              </FormField>
-               <FormField label="Phone Number" hint="Your contact phone number">
-                <input
-                  className={inputCls}
-                  type="tel"
-                  name="phoneNumber"
-                  value={data.phoneNumber}
-                  placeholder="e.g. (123) 456-7890"
-                  onChange={handleChange}
-                />
-              </FormField>
-              <FormField label="GitHub Link" hint="Your GitHub profile URL">
-                <input
-                  className={inputCls}
-                  type="url"
-                  name="githubLink"
-                  value={data.githubLink}
-                  placeholder="e.g. https://github.com/jane_doe"
-                  onChange={handleChange}
-                />
-              </FormField>
-              <FormField label="LinkedIn Link" hint="Your LinkedIn profile URL">
-                <input
-                  className={inputCls}
-                  type="url"
-                  name="linkedinLink"
-                  value={data.linkedinLink}
-                  placeholder="e.g. https://linkedin.com/in/jane-doe"
-                  onChange={handleChange}
-                />
-              </FormField>
-               <FormField label="Location" hint="Your current location">
-                <input
-                  className={inputCls}
-                  type="text"
-                  name="location"
-                  value={data.location}
-                  placeholder="e.g. New Delhi, CA"
-                  onChange={handleChange}
-                />
-              </FormField>
-              <NavButtons
-                onNext={() => handleNext("Experience")}
-                nextLabel="Experience"
-                showError={showError && activeTab === "Personal Details"}
-                errorMsg="Please fill in your name, email, and summary."
-              />
+              )}
             </div>
           )}
 
           {/* EXPERIENCE */}
           {activeTab === "Experience" && (
             <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
-              <SectionHeader count={data.experience.length} max={3} label="Work Experiences" />
+              <SectionHeader count={data.experience.length} max={templateData.layoutInfo?.maxExperience ?? 3} label="Work Experiences" />
 
               {data.experience.map((exp, i) => (
                 <div key={i} className="bg-white/5 p-5 rounded-xl border border-white/10 shadow-sm space-y-4 hover:border-white/20 transition-all">
@@ -347,24 +394,38 @@ const ResumeBuilder = () => {
                 </div>
               ))}
 
-              {data.experience.length < 3 && (
+              {data.experience.length < (templateData.layoutInfo?.maxExperience ?? 3) && (
                 <AddButton onClick={() => addListItem('experience')} label="Add Another Experience" />
               )}
 
-              <NavButtons
-                onBack={() => setActiveTab("Personal Details")}
-                onNext={() => handleNext("Projects")}
-                nextLabel="Projects"
-                showError={showError && activeTab === "Experience"}
-                errorMsg="Fill in the role, company, and duration for each experience."
-              />
+              {tabIndex === tabs.length - 1 ? (
+                <div className="pt-4 flex justify-between items-center">
+                  <button onClick={() => setActiveTab(tabs[tabIndex - 1])} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
+                    ← Back
+                  </button>
+                  <div className="flex items-center gap-2 px-5 py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Looking great! Download below ↓
+                  </div>
+                </div>
+              ) : (
+                <NavButtons
+                  onBack={() => setActiveTab(tabs[tabIndex - 1])}
+                  onNext={() => handleNext(tabs[tabIndex + 1])}
+                  nextLabel={tabs[tabIndex + 1]}
+                  showError={showError && activeTab === "Experience"}
+                  errorMsg="Fill in the role, company, and duration for each experience."
+                />
+              )}
             </div>
           )}
 
           {/* PROJECTS */}
           {activeTab === "Projects" && (
             <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
-              <SectionHeader count={data.projects.length} max={3} label="Projects" />
+              <SectionHeader count={data.projects.length} max={templateData.layoutInfo?.maxProject ?? 3} label="Projects" />
 
               {data.projects.map((proj, i) => (
                 <div key={i} className="bg-white/5 p-5 rounded-xl border border-white/10 shadow-sm space-y-4 hover:border-white/20 transition-all">
@@ -391,17 +452,31 @@ const ResumeBuilder = () => {
                 </div>
               ))}
 
-              {data.projects.length < 3 && (
+              {data.projects.length < (templateData.layoutInfo?.maxProject ?? 3) && (
                 <AddButton onClick={() => addListItem('projects')} label="Add Another Project" />
               )}
 
-              <NavButtons
-                onBack={() => setActiveTab("Experience")}
-                onNext={() => handleNext("Skills")}
-                nextLabel="Skills"
-                showError={showError && activeTab === "Projects"}
-                errorMsg="Fill in the title and description for each project."
-              />
+              {tabIndex === tabs.length - 1 ? (
+                <div className="pt-4 flex justify-between items-center">
+                  <button onClick={() => setActiveTab(tabs[tabIndex - 1])} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
+                    ← Back
+                  </button>
+                  <div className="flex items-center gap-2 px-5 py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Looking great! Download below ↓
+                  </div>
+                </div>
+              ) : (
+                <NavButtons
+                  onBack={() => setActiveTab(tabs[tabIndex - 1])}
+                  onNext={() => handleNext(tabs[tabIndex + 1])}
+                  nextLabel={tabs[tabIndex + 1]}
+                  showError={showError && activeTab === "Projects"}
+                  errorMsg="Fill in the title and description for each project."
+                />
+              )}
             </div>
           )}
 
@@ -474,7 +549,7 @@ const ResumeBuilder = () => {
               </div>
 
               <div className="pt-2 flex justify-between items-center">
-                <button onClick={() => setActiveTab("Projects")} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
+                <button onClick={() => setActiveTab(tabs[tabIndex - 1])} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
                   ← Back
                 </button>
                 <div className="flex items-center gap-2 px-5 py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.1)]">
@@ -490,7 +565,7 @@ const ResumeBuilder = () => {
       </div>
 
       {/* ── Preview Area ───────────────────────────────────────────────── */}
-      <div className='flex-1 bg-[var(--bg)] flex flex-col items-center justify-start overflow-auto relative'>
+      <div className={`flex-1 bg-[var(--bg)] flex flex-col items-start md:items-center justify-start overflow-auto relative ${mobileView === "preview" ? "flex" : "hidden md:flex"}`}>
         {/* Preview header bar */}
         <div className="w-full flex items-center justify-between px-6 py-3 bg-[var(--bg)]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-10">
 
@@ -505,18 +580,48 @@ const ResumeBuilder = () => {
         </div>
 
         {/* A4 paper preview */}
-        <div className="p-8 flex items-start justify-center w-full">
+        <div className="p-4 md:p-8 flex items-start justify-start md:justify-center w-full">
           {/* A4 ratio: 794 × 1123 px */}
           <div
-            className="bg-white shadow-2xl ring-1 ring-black/8 rounded-sm shrink-0"
+            className="bg-white shadow-2xl ring-1 ring-black/8 rounded-sm shrink-0 w-[794px] md:w-[calc(100vw-440px-4rem)] lg:w-[calc(100vw-500px-4rem)] md:max-w-[794px]"
             style={{
-              width: 'min(794px, calc(100vw - 520px - 4rem))',
               aspectRatio: '794 / 1123',
             }}
           >
-            <IframeRender Stringhtml={templateData.html ?? ""} data={{ ...data, skills: formattedSkills }} />
+            <IframeRender Stringhtml={templateData.html ?? ""} data={{ ...data, skills: formattedSkills }} supportedFields={templateData.supportedFields} />
           </div>
         </div>
+      </div>
+
+      {/* Mobile view toggle */}
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[var(--bg)]/90 border border-white/10 backdrop-blur-md rounded-full py-1.5 px-2.5 flex items-center gap-1.5 shadow-2xl">
+        <button
+          onClick={() => setMobileView("edit")}
+          className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            mobileView === "edit"
+              ? "bg-[var(--accent)] text-white shadow-lg shadow-primary/25"
+              : "text-white/60 hover:text-white"
+          }`}
+        >
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+          Edit
+        </button>
+        <button
+          onClick={() => setMobileView("preview")}
+          className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            mobileView === "preview"
+              ? "bg-[var(--accent)] text-white shadow-lg shadow-primary/25"
+              : "text-white/60 hover:text-white"
+          }`}
+        >
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          Preview
+        </button>
       </div>
     </div>
   )

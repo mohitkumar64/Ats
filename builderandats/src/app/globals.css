@@ -453,7 +453,7 @@ body {
 }
 
 .btn-accent {
-  background: var(--accent);
+
   color: #fff;
   border: 1px solid transparent;
   padding: 0.8125rem 1.75rem;
@@ -464,7 +464,7 @@ body {
 }
 
 .btn-accent:hover {
-  background: #f08050;
+  color: black;
   box-shadow: 0 4px 24px rgba(232, 117, 74, 0.35);
 }
 
@@ -515,8 +515,8 @@ body {
 
 .glass-card-hover {
   transition: border-color var(--dur-md) var(--ease-out),
-              box-shadow var(--dur-md) var(--ease-out),
-              transform var(--dur-md) var(--ease-out);
+    box-shadow var(--dur-md) var(--ease-out),
+    transform var(--dur-md) var(--ease-out);
 }
 
 .glass-card-hover:hover {
@@ -588,7 +588,7 @@ body {
   line-height: 1.5;
   outline: none;
   transition: border-color var(--dur-sm) var(--ease-out),
-              box-shadow var(--dur-sm) var(--ease-out);
+    box-shadow var(--dur-sm) var(--ease-out);
 }
 
 .input-field:focus {
@@ -618,7 +618,7 @@ body {
   line-height: 1.5;
   outline: none;
   transition: border-color var(--dur-sm) var(--ease-out),
-              box-shadow var(--dur-sm) var(--ease-out);
+    box-shadow var(--dur-sm) var(--ease-out);
 }
 
 .input-field-plain:focus {
@@ -649,7 +649,7 @@ body {
   outline: none;
   resize: none;
   transition: border-color var(--dur-sm) var(--ease-out),
-              box-shadow var(--dur-sm) var(--ease-out);
+    box-shadow var(--dur-sm) var(--ease-out);
 }
 
 .textarea-field:focus {

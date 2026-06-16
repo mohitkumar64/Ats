@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { ScanSearch } from "lucide-react";
+import { ScanSearch, FileText } from "lucide-react";
 import gsap from "gsap";
 
 const EndSection = () => {
@@ -129,7 +129,7 @@ const EndSection = () => {
                             <div className="flex flex-col sm:flex-row gap-3 pt-2">
                                 <Link href="/ats" className="flex-1   hover:-rotate-5 duration-300 transition-transform">
                                     <button
-                                        className="btn btn-accent w-full"
+                                        className="btn btn-accent  bg-[#E8754A] hover:bg-[#c95f35] w-full"
                                         style={{ padding: "0.9375rem", fontSize: "0.9375rem" }}
                                     >
                                         <ScanSearch className="w-4 h-4" />
@@ -141,6 +141,7 @@ const EndSection = () => {
                                         className="btn btn-ghost"
                                         style={{ padding: "0.9375rem 1.5rem", fontSize: "0.9375rem" }}
                                     >
+                                        <FileText className="w-4 h-4" />
                                         Build Resume
                                     </button>
                                 </Link>

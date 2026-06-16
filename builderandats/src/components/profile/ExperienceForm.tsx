@@ -46,7 +46,7 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    
+
     // Format arrays before saving
     const formattedData = experienceList.map(exp => ({
       ...exp,
@@ -71,7 +71,7 @@ export default function ExperienceForm({ data, onSave }: ExperienceFormProps) {
         <button
           type="submit"
           disabled={saving}
-          className="btn-primary px-5 py-2 text-sm flex items-center gap-2 disabled:opacity-50"
+          className="btn-primary px-3 md:px-5 py-2  text-[12px] sm:text-sm flex items-center gap-2 disabled:opacity-50"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Save Changes

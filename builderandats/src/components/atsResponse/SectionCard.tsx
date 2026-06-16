@@ -43,7 +43,7 @@ const SectionCard = ({ keyName, data }: SectionCardProps) => {
         </div>
 
         <div
-          className="px-4 py-2 rounded-xl text-sm font-bold"
+          className="px-4 py-2 rounded-xl text-center text-sm font-bold"
           style={{
             background: "var(--accent-dim)",
             border: "1px solid rgba(232,117,74,0.18)",

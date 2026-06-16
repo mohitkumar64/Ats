@@ -48,7 +48,7 @@ const HeroSection = () => {
             {/* Left content */}
 
             <div className=" container-hero flex justify-center">
-                <div className="max-w-[580px] mt-20">
+                <div className="max-w-[780px] lg:pr-20  mt-20">
 
                     {/* Headline */}
                     <h1
@@ -58,7 +58,7 @@ const HeroSection = () => {
                             fontWeight: 800,
                             fontSize: "clamp(3rem, 5.5vw, 4.75rem)",
                             lineHeight: 1.0,
-                            letterSpacing: "-0.03em",
+
                             color: "#F0F2F5",
                         }}
                     >
@@ -87,7 +87,7 @@ const HeroSection = () => {
                     <div className="h-ctas flex flex-wrap gap-3 mb-12">
                         <Link href="/ats" >
                             <button
-                                className="btn btn-accent group hover:-rotate-5 duration-300 transition-transform"
+                                className="btn btn-accent bg-[#E8754A] hover:bg-[#c95f35] group hover:bg-white    hover:-rotate-5 duration-500 transition-transform"
                                 style={{ padding: "0.875rem 1.875rem", fontSize: "0.9375rem" }}
                             >
                                 <ScanSearch className="w-4 h-4" />
@@ -150,7 +150,7 @@ const HeroSection = () => {
             >
                 <ATSCard />
             </div>
-        </section>
+        </section >
     )
 }
 

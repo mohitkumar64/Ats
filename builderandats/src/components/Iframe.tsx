@@ -2,11 +2,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import Handlebars from "handlebars";
 
-const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) => {
+const IframeRender = ({ data, Stringhtml, supportedFields }: { data: any; Stringhtml: string; supportedFields?: string[] }) => {
   const [html, setHtml] = useState("");
   const [template, setTemplate] = useState<HandlebarsTemplateDelegate | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const isFieldSupported = (field: string) => {
+    if (!supportedFields) return true;
+    return supportedFields.includes(field);
+  };
 
   useEffect(() => {
     if (!Stringhtml) return;
@@ -23,23 +28,27 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
     const data1 = {
       name: data.name || "John Doe",
       email: data.email || "john.doe@example.com",
-      summary: data.summary || "Experienced professional with a passion for building great products.",
-      phoneNumber: data.phoneNumber || "+91 1234567890",
-      githubLink: data.githubLink || "https://github.com/yourname",
-      linkedinLink: data.linkedinLink || "https://linkedin.com/in/yourname",
-      location: data.location || "City, Country",
-      experience: data.experience?.length
-        ? data.experience
-        : [{ role: "Frontend Developer", company: "Tech Corp", duration: "2023 - Present", description: "Built scalable UI components." }],
-      projects: data.projects || [],
-      skills: data.skills
-        ? (typeof data.skills === "object" && !Array.isArray(data.skills)
-            ? Object.entries(data.skills).map(([category, list]) => ({
-                title: category,
-                names: Array.isArray(list) ? list.join(", ") : String(list),
-              }))
-            : data.skills)
-        : [{ title: "Programming Languages", names: "JavaScript, TypeScript, Python" }],
+      summary: isFieldSupported("summary") ? (data.summary || "Experienced professional with a passion for building great products.") : "",
+      phoneNumber: isFieldSupported("phoneNumber") ? (data.phoneNumber || "+91 1234567890") : "",
+      githubLink: isFieldSupported("githubLink") ? (data.githubLink || "https://github.com/yourname") : "",
+      linkedinLink: isFieldSupported("linkedinLink") ? (data.linkedinLink || "https://linkedin.com/in/yourname") : "",
+      location: isFieldSupported("location") ? (data.location || "City, Country") : "",
+      experience: isFieldSupported("experience")
+        ? (data.experience?.length
+            ? data.experience
+            : [{ role: "Frontend Developer", company: "Tech Corp", duration: "2023 - Present", description: "Built scalable UI components." }])
+        : [],
+      projects: isFieldSupported("projects") ? (data.projects || []) : [],
+      skills: isFieldSupported("skills")
+        ? (data.skills
+            ? (typeof data.skills === "object" && !Array.isArray(data.skills)
+                ? Object.entries(data.skills).map(([category, list]) => ({
+                    title: category,
+                    names: Array.isArray(list) ? list.join(", ") : String(list),
+                  }))
+                : data.skills)
+            : [{ title: "Programming Languages", names: "JavaScript, TypeScript, Python" }])
+        : [],
     };
 
     const timer = setTimeout(() => {
@@ -86,7 +95,7 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
       style={{ containerType: "inline-size" }}
     >
       {/* Floating Download Button */}
-      <div className="fixed bottom-8 right-8 z-50">
+      <div className="fixed bottom-24 md:bottom-8 right-6 md:right-8 z-50">
         <button
           onClick={handleGeneratePdf}
           disabled={isDownloading}
@@ -116,7 +125,25 @@ const IframeRender = ({ data, Stringhtml }: { data: any; Stringhtml: string }) =
       <div className="w-full h-full relative overflow-hidden rounded">
         {html ? (
           <iframe
-            srcDoc={html + "<style>::-webkit-scrollbar { display: none; } body { -ms-overflow-style: none; scrollbar-width: none; }</style>"}
+            srcDoc={html + `
+              <style>
+                a { pointer-events: none !important; cursor: default !important; text-decoration: none !important; color: inherit !important; }
+                ::-webkit-scrollbar { display: none; } 
+                body { -ms-overflow-style: none; scrollbar-width: none; }
+              </style>
+              <script>
+                document.addEventListener('click', function(e) {
+                  var target = e.target;
+                  while (target && target.tagName !== 'A') {
+                    target = target.parentNode;
+                  }
+                  if (target) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }, true);
+              </script>
+            `}
             title="Resume Preview"
             className="absolute top-0 left-0 border-0 bg-white"
             style={{

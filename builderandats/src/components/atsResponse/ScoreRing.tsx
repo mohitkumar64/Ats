@@ -59,9 +59,9 @@ const ScoreRing = ({ score }: ScoreRingProps) => {
         <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold mt-2">
           ATS SCORE
         </span>
-        <div className="mt-4 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-300 text-xs font-bold">
+        {/* <div className="mt-4 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-emerald-300 text-xs font-bold">
           Resume Ready ✔
-        </div>
+        </div> */}
       </div>
     </div>
   );
