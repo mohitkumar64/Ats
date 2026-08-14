@@ -13,6 +13,7 @@ interface TemplateData {
   layoutInfo?: {
     maxProject?: number;
     maxExperience?: number;
+    maxEducation?: number;
   };
 }
 
@@ -33,6 +34,8 @@ const ResumeBuilder = () => {
     if (isFieldSupported("experience")) list.push("Experience");
     if (isFieldSupported("projects")) list.push("Projects");
     if (isFieldSupported("skills")) list.push("Skills");
+    if (isFieldSupported("education")) list.push("Education");
+
     return list;
   }, [templateData]);
 
@@ -69,12 +72,22 @@ const ResumeBuilder = () => {
     linkedinLink: "",
     phoneNumber: "",
     location: "",
+    headingFontSize: "20",
+    bodyFontSize: "14",
+    nameFontSize: "36",
     experience: [
       {
         role: "",
         company: "",
         duration: "",
         description: ""
+      }
+    ],
+    education: [
+      {
+        degree: "",
+        school: "",
+        duration: "",
       }
     ],
     projects: [
@@ -98,7 +111,7 @@ const ResumeBuilder = () => {
     }));
   }
 
-  const handleListChange = (sectionKey: 'experience' | 'projects', index: number, fieldKey: string, value: string) => {
+  const handleListChange = (sectionKey: 'experience' | 'projects' | "education", index: number, fieldKey: string, value: string) => {
     setData(prev => {
       const updatedList = [...prev[sectionKey]] as any[];
       updatedList[index] = {
@@ -112,16 +125,40 @@ const ResumeBuilder = () => {
     });
   };
 
-  const addListItem = (sectionKey: 'experience' | 'projects') => {
+  const addListItem = (sectionKey: 'experience' | 'projects' | 'education') => {
     const maxLimit = sectionKey === 'experience'
       ? (templateData.layoutInfo?.maxExperience ?? 3)
       : (templateData.layoutInfo?.maxProject ?? 3);
 
     if (data[sectionKey].length >= maxLimit) return;
+
+    let tabTemplate = {
+      "experience": {
+        role: "",
+        company: "",
+        duration: "",
+        description: ""
+      },
+      "projects": {
+        title: "",
+        link: "",
+        description: ""
+      },
+      "education": {
+        degree: "",
+        school: "",
+        duration: ""
+      }
+    }
+
+
+
+
+
+
+
     setData(prev => {
-      const newItem = sectionKey === 'experience'
-        ? { role: "", company: "", duration: "", description: "" }
-        : { title: "", link: "", description: "" };
+      const newItem = tabTemplate[sectionKey];
       return {
         ...prev,
         [sectionKey]: [...prev[sectionKey], newItem] as any
@@ -129,7 +166,7 @@ const ResumeBuilder = () => {
     });
   };
 
-  const removeListItem = (sectionKey: 'experience' | 'projects', index: number) => {
+  const removeListItem = (sectionKey: 'experience' | 'projects' | "education", index: number) => {
     setData(prev => ({
       ...prev,
       [sectionKey]: prev[sectionKey].filter((_, i) => i !== index) as any
@@ -144,9 +181,9 @@ const ResumeBuilder = () => {
   const isTabValid = (tab: string): boolean => {
     switch (tab) {
       case "Personal Details":
-        return data.name.trim() !== "" && 
-               data.email.trim() !== "" && 
-               (isFieldSupported("summary") ? data.summary.trim() !== "" : true);
+        return data.name.trim() !== "" &&
+          data.email.trim() !== "" &&
+          (isFieldSupported("summary") ? data.summary.trim() !== "" : true);
       case "Experience":
         return data.experience.every(
           (e) => e.role.trim() !== "" && e.company.trim() !== "" && e.duration.trim() !== ""
@@ -156,6 +193,10 @@ const ResumeBuilder = () => {
       case "Skills":
         return skillsList.length > 0 && skillsList.every(
           (item) => item.category.trim() !== "" && item.values.trim() !== ""
+        );
+      case "Education":
+        return data.education.every(
+          (e) => e.degree.trim() !== "" && e.school.trim() !== "" && e.duration.trim() !== ""
         );
       default:
         return true;
@@ -266,7 +307,7 @@ const ResumeBuilder = () => {
                   type="text"
                   name="name"
                   value={data.name}
-                  placeholder="e.g. Jane Doe"
+                  placeholder="e.g. Aditya kumar"
                   onChange={handleChange}
                 />
               </FormField>
@@ -276,7 +317,7 @@ const ResumeBuilder = () => {
                   type="email"
                   name="email"
                   value={data.email}
-                  placeholder="e.g. jane@example.com"
+                  placeholder="e.g. adi@example.com"
                   onChange={handleChange}
                 />
               </FormField>
@@ -310,7 +351,7 @@ const ResumeBuilder = () => {
                     type="url"
                     name="githubLink"
                     value={data.githubLink}
-                    placeholder="e.g. https://github.com/jane_doe"
+                    placeholder="e.g. https://github.com/adi"
                     onChange={handleChange}
                   />
                 </FormField>
@@ -322,7 +363,7 @@ const ResumeBuilder = () => {
                     type="url"
                     name="linkedinLink"
                     value={data.linkedinLink}
-                    placeholder="e.g. https://linkedin.com/in/jane-doe"
+                    placeholder="e.g. https://linkedin.com/in/adi"
                     onChange={handleChange}
                   />
                 </FormField>
@@ -334,11 +375,58 @@ const ResumeBuilder = () => {
                     type="text"
                     name="location"
                     value={data.location}
-                    placeholder="e.g. New Delhi, CA"
+                    placeholder="e.g. New Delhi"
                     onChange={handleChange}
                   />
                 </FormField>
               )}
+
+              {/* Font Size Settings */}
+              <div className="pt-2 pb-1 border-t border-white/10 mt-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="4 7 4 4 20 4 20 7" />
+                    <line x1="9" y1="20" x2="15" y2="20" />
+                    <line x1="12" y1="4" x2="12" y2="20" />
+                  </svg>
+                  <span className="text-xs font-bold text-white/80 uppercase tracking-wider">Font Size Controls (px)</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <FormField label="Name Size">
+                    <input
+                      className={inputSmCls}
+                      type="number"
+                      name="nameFontSize"
+                      min="18"
+                      max="60"
+                      value={data.nameFontSize}
+                      onChange={handleChange}
+                    />
+                  </FormField>
+                  <FormField label="Heading Size">
+                    <input
+                      className={inputSmCls}
+                      type="number"
+                      name="headingFontSize"
+                      min="12"
+                      max="36"
+                      value={data.headingFontSize}
+                      onChange={handleChange}
+                    />
+                  </FormField>
+                  <FormField label="Body/Text Size">
+                    <input
+                      className={inputSmCls}
+                      type="number"
+                      name="bodyFontSize"
+                      min="10"
+                      max="24"
+                      value={data.bodyFontSize}
+                      onChange={handleChange}
+                    />
+                  </FormField>
+                </div>
+              </div>
               {tabs.length === 1 ? (
                 <div className="pt-4 flex justify-end">
                   <div className="flex items-center gap-2 px-5 py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.1)]">
@@ -358,6 +446,67 @@ const ResumeBuilder = () => {
               )}
             </div>
           )}
+
+          {activeTab === "education" && (
+            <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
+              <SectionHeader count={data.education.length} max={templateData.layoutInfo?.maxEducation ?? 3} label="Education" />
+
+              {data.education.map((edu, i) => (
+                <div key={i} className="bg-white/5 p-5 rounded-xl border border-white/10 shadow-sm space-y-4 hover:border-white/20 transition-all">
+                  <div className="flex justify-between items-center">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider">
+                      <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] flex items-center justify-center font-bold">{i + 1}</span>
+                      Education
+                    </span>
+                    {data.education.length > 1 && (
+                      <button onClick={() => removeListItem('education', i)} className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-2 py-1 rounded-md transition-colors font-medium">
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <FormField label="Degree">
+                      <input className={inputSmCls} type="text" value={edu.degree} placeholder="e.g. Btech(cse)" onChange={(e) => handleListChange('education', i, 'degree', e.target.value)} />
+                    </FormField>
+                    <FormField label="College">
+                      <input className={inputSmCls} type="text" value={edu.school} placeholder="e.g. Jss Noida" onChange={(e) => handleListChange('education', i, 'school', e.target.value)} />
+                    </FormField>
+                  </div>
+                  <FormField label="Duration">
+                    <input className={inputSmCls} type="text" value={edu.duration} placeholder="e.g. Jan 2021 – Present" onChange={(e) => handleListChange('education', i, 'duration', e.target.value)} />
+                  </FormField>
+
+                </div>
+              ))}
+
+              {data.education.length < (templateData.layoutInfo?.maxEducation ?? 3) && (
+                <AddButton onClick={() => addListItem('education')} label="Add Another Education" />
+              )}
+
+              {tabIndex === tabs.length - 1 ? (
+                <div className="pt-4 flex justify-between items-center">
+                  <button onClick={() => setActiveTab(tabs[tabIndex - 1])} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
+                    ← Back
+                  </button>
+                  <div className="flex items-center gap-2 px-5 py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Looking great! Download below ↓
+                  </div>
+                </div>
+              ) : (
+                <NavButtons
+                  onBack={() => setActiveTab(tabs[tabIndex - 1])}
+                  onNext={() => handleNext(tabs[tabIndex + 1])}
+                  nextLabel={tabs[tabIndex + 1]}
+                  showError={showError && activeTab === "education"}
+                  errorMsg="Fill in the degree, college, and duration for each education."
+                />
+              )}
+            </div>
+          )}
+
 
           {/* EXPERIENCE */}
           {activeTab === "Experience" && (
@@ -507,7 +656,7 @@ const ResumeBuilder = () => {
                         </button>
                       )}
                     </div>
-                    
+
                     <FormField label="Category">
                       <input
                         className={inputSmCls}
@@ -597,24 +746,22 @@ const ResumeBuilder = () => {
       <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[var(--bg)]/90 border border-white/10 backdrop-blur-md rounded-full py-1.5 px-2.5 flex items-center gap-1.5 shadow-2xl">
         <button
           onClick={() => setMobileView("edit")}
-          className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
-            mobileView === "edit"
-              ? "bg-[var(--accent)] text-white shadow-lg shadow-primary/25"
-              : "text-white/60 hover:text-white"
-          }`}
+          className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${mobileView === "edit"
+            ? "bg-[var(--accent)] text-white shadow-lg shadow-primary/25"
+            : "text-white/60 hover:text-white"
+            }`}
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
           </svg>
           Edit
         </button>
         <button
           onClick={() => setMobileView("preview")}
-          className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
-            mobileView === "preview"
-              ? "bg-[var(--accent)] text-white shadow-lg shadow-primary/25"
-              : "text-white/60 hover:text-white"
-          }`}
+          className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${mobileView === "preview"
+            ? "bg-[var(--accent)] text-white shadow-lg shadow-primary/25"
+            : "text-white/60 hover:text-white"
+            }`}
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -695,8 +842,8 @@ const NavButtons = ({
         <button
           onClick={onNext}
           className={`px-5 py-2.5 text-white text-sm font-semibold rounded-lg transition-all shadow-sm ${showError
-              ? 'bg-red-500 animate-[shake_0.3s_ease-in-out]'
-              : 'bg-primary hover:bg-primary/90'
+            ? 'bg-red-500 animate-[shake_0.3s_ease-in-out]'
+            : 'bg-primary hover:bg-primary/90'
             }`}
         >
           {nextLabel} →

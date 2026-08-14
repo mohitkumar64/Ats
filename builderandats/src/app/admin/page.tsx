@@ -2,7 +2,8 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { UploadCloud, Image as ImageIcon, FileCode, Type, X, ShieldCheck } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, FileCode, Type, X, ShieldCheck, Clipboard, PinIcon } from 'lucide-react';
+import { PromptText } from '@/data/promptextdata';
 import toast, { Toaster } from 'react-hot-toast';
 
 const AdminPage = () => {
@@ -11,7 +12,21 @@ const AdminPage = () => {
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const imgRef = useRef(null);
+
+
+
+
+
+
+
+
   const htmlRef = useRef<HTMLInputElement>(null);
+  const [layoutInfo, setLayoutInfo] = useState({
+    maxProject: 3,
+    maxExperience: 3,
+    maxEducation: 3
+  });
+  const [HtmlfileName, setHtmlfileName] = useState<String>("No File is Selected yet")
 
   const [supportedFields, setSupportedFields] = useState({
     summary: true,
@@ -22,6 +37,7 @@ const AdminPage = () => {
     experience: true,
     projects: true,
     skills: true,
+    education: true
   });
 
   const fieldsConfig = [
@@ -33,6 +49,7 @@ const AdminPage = () => {
     { key: "experience", label: "Experience", desc: "Work Experience" },
     { key: "projects", label: "Projects", desc: "Projects list" },
     { key: "skills", label: "Skills", desc: "Skills categories" },
+    { key: "education", label: "Education", desc: "Education" }
   ];
 
 
@@ -75,6 +92,7 @@ const AdminPage = () => {
       formData.append("img", selectedImage);
     }
     formData.append("name", fileName);
+
     formData.append("html", htmlString);
     formData.append("supportedFields", JSON.stringify(
       Object.keys(supportedFields).filter(key => supportedFields[key as keyof typeof supportedFields])
@@ -87,7 +105,11 @@ const AdminPage = () => {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success("Template uploaded successfully");
+        toast.success("Template uploaded successfully", {
+
+          duration: 4000,
+          position: 'top-right',
+        });
         setFilePreview(null);
         setSelectedImage(null);
         setFileName("");
@@ -100,6 +122,7 @@ const AdminPage = () => {
           experience: true,
           projects: true,
           skills: true,
+          education: true,
         });
       } else {
         toast.error(data.message);
@@ -149,13 +172,27 @@ const AdminPage = () => {
               required
             />
           </div>
+          <div>
+            <p
+              className='text-sm cursor-pointer font-semibold '
+              title="use this prompt to convert the html into template format"
+              onClick={
+                (e) => {
+                  navigator.clipboard.writeText(
+                    PromptText
+                  )
+                }
+              }
+            > <PinIcon size={15} className=' text-red-400 inline-block' /> Convert HTML to Resume Template <Clipboard size={15} className=" mx-2 text-sm text-blue-500 cursor-pointer font-semibold inline-block" /></p>
+          </div>
+
 
           <div className="grid md:grid-cols-2 gap-8">
 
             <div className="space-y-3">
               <label className="flex items-center gap-2 text-sm font-semibold text-foreground">
                 <FileCode size={16} className="text-primary" />
-                HTML File
+                HTML File in Template format
               </label>
               <div
                 className={`relative border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center text-center transition-all ${dragActive ? 'border-primary bg-primary/5' : 'border-input hover:border-primary/50 bg-background/50 hover:bg-background'
@@ -167,6 +204,7 @@ const AdminPage = () => {
               >
                 <input
                   ref={htmlRef}
+                  onChange={(e) => setHtmlfileName("File is Selected " + e.target?.files?.[0]?.name || "No File is Selected yet")}
                   type="file"
                   accept=".html"
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
@@ -175,8 +213,15 @@ const AdminPage = () => {
                 <div className="p-3 bg-primary/10 rounded-full text-primary mb-3">
                   <FileCode size={24} />
                 </div>
-                <p className="text-sm font-medium text-foreground mb-1">Click or drag HTML file</p>
+                {
+                  HtmlfileName != "No File is Selected yet" ? (
+                    <p className="text-sm  text-green-600 font-medium text-foreground mb-1">{HtmlfileName}</p>
+                  ) : (
+                    <p className="text-sm  font-medium text-foreground mb-1">Click or drag HTML file</p>
+                  )
+                }
                 <p className="text-xs text-foreground/50">Only .html files are supported</p>
+
               </div>
             </div>
 
@@ -256,11 +301,10 @@ const AdminPage = () => {
                 return (
                   <label
                     key={field.key}
-                    className={`flex flex-col justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${
-                      isChecked
-                        ? "border-primary/50 bg-primary/5 text-foreground"
-                        : "border-border bg-background/50 hover:bg-background text-foreground/60"
-                    }`}
+                    className={`flex flex-col justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${isChecked
+                      ? "border-primary/50 bg-primary/5 text-foreground"
+                      : "border-border bg-background/50 hover:bg-background text-foreground/60"
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold">{field.label}</span>
@@ -276,11 +320,10 @@ const AdminPage = () => {
                         className="sr-only"
                       />
                       <div
-                        className={`w-4.5 h-4.5 rounded flex items-center justify-center border transition-all ${
-                          isChecked
-                            ? "bg-primary border-primary text-white"
-                            : "border-border bg-transparent"
-                        }`}
+                        className={`w-4.5 h-4.5 rounded flex items-center justify-center border transition-all ${isChecked
+                          ? "bg-primary border-primary text-white"
+                          : "border-border bg-transparent"
+                          }`}
                       >
                         {isChecked && (
                           <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4">

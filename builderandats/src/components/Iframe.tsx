@@ -33,6 +33,12 @@ const IframeRender = ({ data, Stringhtml, supportedFields }: { data: any; String
       githubLink: isFieldSupported("githubLink") ? (data.githubLink || "https://github.com/yourname") : "",
       linkedinLink: isFieldSupported("linkedinLink") ? (data.linkedinLink || "https://linkedin.com/in/yourname") : "",
       location: isFieldSupported("location") ? (data.location || "City, Country") : "",
+      nameFontSize: data.nameFontSize ? (String(data.nameFontSize).endsWith("px") ? data.nameFontSize : `${data.nameFontSize}px`) : "36px",
+      headingFontSize: data.headingFontSize ? (String(data.headingFontSize).endsWith("px") ? data.headingFontSize : `${data.headingFontSize}px`) : "20px",
+      bodyFontSize: data.bodyFontSize ? (String(data.bodyFontSize).endsWith("px") ? data.bodyFontSize : `${data.bodyFontSize}px`) : "14px",
+      nameFontSizeRaw: data.nameFontSize || 36,
+      headingFontSizeRaw: data.headingFontSize || 20,
+      bodyFontSizeRaw: data.bodyFontSize || 14,
       experience: isFieldSupported("experience")
         ? (data.experience?.length
             ? data.experience
