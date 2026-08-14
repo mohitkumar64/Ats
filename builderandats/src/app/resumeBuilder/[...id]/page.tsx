@@ -142,7 +142,7 @@ const ResumeBuilder = () => {
     });
   };
 
-  const handleArrayFieldChange = (sectionKey: 'experience' | 'projects', index: number, fieldKey: string, arrayIndex: number, value: string) => {
+  const handleArrayFieldChange = (sectionKey: 'experience' | 'projects', index: number, fieldKey: 'description', arrayIndex: number, value: string) => {
     setData(prev => {
       const updatedList = [...prev[sectionKey]];
       const currentArray = updatedList[index][fieldKey] || [""];
@@ -153,7 +153,7 @@ const ResumeBuilder = () => {
     });
   };
 
-  const addArrayField = (sectionKey: 'experience' | 'projects', index: number, fieldKey: string) => {
+  const addArrayField = (sectionKey: 'experience' | 'projects', index: number, fieldKey: 'description') => {
     setData(prev => {
       const updatedList = [...prev[sectionKey]];
       const currentArray = updatedList[index][fieldKey] || [""];
@@ -162,7 +162,7 @@ const ResumeBuilder = () => {
     });
   };
 
-  const removeArrayField = (sectionKey: 'experience' | 'projects', index: number, fieldKey: string, arrayIndex: number) => {
+  const removeArrayField = (sectionKey: 'experience' | 'projects', index: number, fieldKey: 'description', arrayIndex: number) => {
     setData(prev => {
       const updatedList = [...prev[sectionKey]];
       const currentArray = updatedList[index][fieldKey] || [""];
@@ -305,30 +305,28 @@ const ResumeBuilder = () => {
                 const isDone = i < tabIndex && isTabValid(tab);
                 const hasError = tabErrors[tab];
                 return (
-                  <>
-
-                    <button
-                      ref={i === 0 ? firsttabref : i === tabs.length - 1 ? lasttabref : midrabref}
-                      key={tab}
-                      disabled={!accessible}
-                      onClick={() => accessible && setActiveTab(tab)}
-                      title={!accessible ? "Complete the previous section first" : undefined}
-                      className={`whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full transition-all flex items-center gap-1.5 ${isActive
-                        ? 'bg-[var(--accent)] text-white ]'
-                        : isDone
-                          ? 'bg-[var(--text-mono-dim)] text-[var(--text-mono)] hover:bg-[var(--text-mono-dim)] cursor-pointer border border-[var(--text-mono-dim)]'
-                          : accessible
-                            ? hasError
-                              ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 cursor-pointer border border-red-500/20'
-                              : 'bg-[var(--surface-2)] text-[var(--text-secondary)] hover:bg-[var(--surface-3)] hover:text-[var(--text-primary)] cursor-pointer border border-[var(--border)]'
-                            : 'bg-[var(--surface-2)] text-[var(--text-tertiary)] cursor-not-allowed opacity-50 border border-[var(--border)]'
-                        }`}
-                    >
-                      {isDone && <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>}
-                      {!accessible && !isActive && !isDone && <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>}
-                      {tab}
-                    </button>
-                  </>);
+                  <button
+                    ref={i === 0 ? firsttabref : i === tabs.length - 1 ? lasttabref : midrabref}
+                    key={tab}
+                    disabled={!accessible}
+                    onClick={() => accessible && setActiveTab(tab)}
+                    title={!accessible ? "Complete the previous section first" : undefined}
+                    className={`whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full transition-all flex items-center gap-1.5 ${isActive
+                      ? 'bg-[var(--accent)] text-white ]'
+                      : isDone
+                        ? 'bg-[var(--text-mono-dim)] text-[var(--text-mono)] hover:bg-[var(--text-mono-dim)] cursor-pointer border border-[var(--text-mono-dim)]'
+                        : accessible
+                          ? hasError
+                            ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 cursor-pointer border border-red-500/20'
+                            : 'bg-[var(--surface-2)] text-[var(--text-secondary)] hover:bg-[var(--surface-3)] hover:text-[var(--text-primary)] cursor-pointer border border-[var(--border)]'
+                          : 'bg-[var(--surface-2)] text-[var(--text-tertiary)] cursor-not-allowed opacity-50 border border-[var(--border)]'
+                      }`}
+                  >
+                    {isDone && <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>}
+                    {!accessible && !isActive && !isDone && <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>}
+                    {tab}
+                  </button>
+                );
               })}
 
             </div>
