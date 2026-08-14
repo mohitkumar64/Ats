@@ -20,9 +20,6 @@ if (typeof window !== "undefined") {
 }
 
 
-
-
-
 export default function Home() {
   const pageRef = useRef<HTMLDivElement>(null);
   const [showIntro, setShowIntro] = useState(true);
@@ -36,15 +33,15 @@ export default function Home() {
     if (!introComplete) return; // wait for intro to finish
     const ctx = gsap.context(() => {
       // Hero — marketing page exception: 600–900ms expressive timing
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      // const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(".h-eyebrow", { y: 14, opacity: 0, duration: 0.5 })
-        .from(".h-headline", { y: 32, opacity: 0, duration: 0.75 }, "-=0.30")
-        .from(".h-sub", { y: 20, opacity: 0, duration: 0.55 }, "-=0.45")
-        .from(".h-ctas > *", { y: 16, opacity: 0, duration: 0.45, stagger: 0.09 }, "-=0.40")
-        .from(".h-meta", { y: 12, opacity: 0, duration: 0.40 }, "-=0.30")
-        .from(".h-person", { x: 40, opacity: 0, duration: 0.80, ease: "power2.out" }, "-=0.9")
-        .from(".h-card", { y: 24, opacity: 0, scale: 0.97, duration: 0.65 }, "-=0.55");
+      // tl.from(".h-eyebrow", { y: 14, opacity: 0, duration: 0.5 })
+      //   .from(".h-headline", { y: 32, opacity: 0, duration: 0.75 }, "-=0.30")
+      //   .from(".h-sub", { y: 20, opacity: 0, duration: 0.55 }, "-=0.45")
+      //   .from(".h-ctas > *", { y: 16, opacity: 0, duration: 0.45, stagger: 0.09 }, "-=0.40")
+      //   .from(".h-meta", { y: 12, opacity: 0, duration: 0.40 }, "-=0.30")
+      //   .from(".h-person", { x: 40, opacity: 0, duration: 0.80, ease: "power2.out" }, "-=0.9")
+      //   .from(".h-card", { y: 24, opacity: 0, scale: 0.97, duration: 0.65 }, "-=0.55");
 
       // Scroll reveals — 50ms stagger per row (Emil stagger rule)
       gsap.utils.toArray<HTMLElement>(".rv").forEach((el, i) => {
@@ -75,7 +72,7 @@ export default function Home() {
       {showIntro && <Intro onComplete={handleIntroComplete} />}
       <div ref={pageRef} className="relative min-h-screen overflow-x-hidden" style={{ background: "var(--bg)" }}>
 
-        {/* ── Ambient background ── */}
+
         <div
           className="fixed inset-0 pointer-events-none"
           style={{
@@ -85,7 +82,7 @@ export default function Home() {
             opacity: 0.06,
             zIndex: 0,
           }} />
-        {/* Warm right-side glow */}
+
 
         <div
           className="fixed inset-0 pointer-events-none"
@@ -94,7 +91,6 @@ export default function Home() {
             zIndex: 0,
           }}
         />
-        {/* Cool left-side glow */}
 
         <div
           className="fixed inset-0 pointer-events-none"
@@ -103,7 +99,7 @@ export default function Home() {
             zIndex: 0,
           }}
         />
-        {/* Fine grid */}
+
 
         <div
           className="fixed inset-0 pointer-events-none"

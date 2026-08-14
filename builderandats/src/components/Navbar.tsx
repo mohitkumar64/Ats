@@ -71,7 +71,7 @@ const Navbar = () => {
           boxShadow: isScrolled ? "0 1px 40px rgba(0,0,0,0.40)" : "none",
         }}
       >
-        <nav className="max-w-[1280px] mx-auto px-6 md:px-10 h-[60px] flex items-center justify-between">
+        <nav className="  px-6 md:px-10 h-[60px] flex items-center justify-between">
 
           {/* ── Logo ── */}
           <button
@@ -194,7 +194,7 @@ const Navbar = () => {
                 style={{
                   color: "#7A8499",
                   border: "1px solid rgba(255,255,255,0.08)",
-                  
+
                   transition: "all 200ms cubic-bezier(0.23, 1, 0.32, 1)",
                 }}
                 onMouseEnter={(e) => {

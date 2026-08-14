@@ -47,7 +47,7 @@ const HeroSection = () => {
 
             {/* Left content */}
 
-            <div className=" container-hero flex justify-center">
+            <div className=" container-hero flex ">
                 <div className="max-w-[780px] lg:pr-20  mt-20">
 
                     {/* Headline */}
