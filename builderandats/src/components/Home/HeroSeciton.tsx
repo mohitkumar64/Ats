@@ -48,7 +48,7 @@ const HeroSection = () => {
             {/* Left content */}
 
             <div className=" container-hero flex ">
-                <div className="max-w-[780px] lg:pr-20  mt-20">
+                <div className="max-w-[780px]  lg:pr-20  mt-20">
 
                     {/* Headline */}
                     <h1
@@ -56,9 +56,8 @@ const HeroSection = () => {
                         style={{
                             fontFamily: "'Syne', system-ui, sans-serif",
                             fontWeight: 800,
-                            fontSize: "clamp(3rem, 5.5vw, 4.75rem)",
+                            fontSize: "clamp(2.5rem, 5.5vw, 4.75rem)",
                             lineHeight: 1.0,
-
                             color: "#F0F2F5",
                         }}
                     >
@@ -121,8 +120,7 @@ const HeroSection = () => {
                         ].map(({ icon: Icon, val, label }) => (
                             <div key={label} className="flex items-center gap-2.5">
                                 <div
-                                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+                                    className="w-8 h-8 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.07)] rounded-lg flex items-center justify-center flex-shrink-0"
                                 >
                                     <Icon className="w-3.5 h-3.5" style={{ color: "#7A8499" }} />
                                 </div>

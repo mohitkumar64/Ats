@@ -45,16 +45,16 @@ export default function RegisterPage() {
         setPassword('');
       } else {
         console.log("error")
-        toast.error('An error occurred while registering', {
-          duration: 1200,
+        toast.error('An error occurred while registering. Please try again.', {
+          duration: 1500,
           position: "top-right",
           style: toastStyle,
         });
       }
     } catch (error) {
       console.log('Registration error:', error);
-      toast.error('An error occurred while registering', {
-        duration: 1200,
+      toast.error('An error occurred while registering. Please try again.', {
+        duration: 1500,
         position: "top-right",
         style: toastStyle,
       });

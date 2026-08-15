@@ -11,7 +11,7 @@ const NotLoggedIn = () => {
 
   useEffect(() => {
     toast.error("Redirecting to login page...", {
-      duration: 1200,
+      duration: 2900,
       position: "top-right",
       style: {
         background: "var(--surface)",

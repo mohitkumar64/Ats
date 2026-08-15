@@ -29,8 +29,8 @@ export default function LoginPage() {
         console.log("response from login api", data);
 
         if (res.ok) {
-          toast.success("Login successful!", {
-            duration: 1200,
+          toast.success("Login successful! You will be redirected shortly.", {
+            duration: 1500,
             position: "top-right",
             style: {
               background: "var(--surface)",
@@ -46,8 +46,8 @@ export default function LoginPage() {
             router.push("/")
           }, 3000)
         } else {
-          toast.error("Login failed", {
-            duration: 1200,
+          toast.error("Login failed. Please check your credentials.", {
+            duration: 1500,
             position: "top-right",
             style: {
               background: "var(--surface)",
@@ -59,8 +59,8 @@ export default function LoginPage() {
           })
         }
       } catch (error) {
-        toast.error("An error occurred during login", {
-          duration: 1200,
+        toast.error("An error occurred during login. Please try again.", {
+          duration: 1500,
           position: "top-right",
           style: {
             background: "var(--surface)",

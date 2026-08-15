@@ -796,7 +796,7 @@ body {
   display: flex;
   flex: 1;
   max-width: 1280px;
-  padding: 0 4.5rem;
+  padding: 0 4rem;
 }
 
 .container-tight {
@@ -817,6 +817,14 @@ body {
 
   .container-tight {
     padding: 0 3rem;
+  }
+
+
+}
+
+@media (min-width: 300px) {
+  .container-hero {
+    padding: 0 1.5rem;
   }
 }
 
