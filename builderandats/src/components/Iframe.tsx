@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Loader } from "lucide-react";
 import Handlebars from "handlebars";
 
 interface IframeData {
@@ -175,6 +176,11 @@ const IframeRender = ({ data, Stringhtml, supportedFields }: { data: IframeData;
 
   return (
     <div ref={containerRef} className="w-full h-full relative bg-white" style={{ containerType: "inline-size" }}>
+      {isDownloading && (
+        <div className="absolute inset-0 bg-white/50 z-50 flex items-center justify-center">
+          <Loader />
+        </div>
+      )}
       <div className="w-full h-full relative overflow-hidden rounded">
         {html ? (
           <iframe

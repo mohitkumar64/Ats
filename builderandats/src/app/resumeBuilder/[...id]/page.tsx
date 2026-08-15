@@ -53,6 +53,8 @@ interface ResumeData {
   experience: ExperienceItem[];
   education: EducationItem[];
   projects: ProjectItem[];
+  certifications: string[];
+  achievements: string[];
 }
 
 const ResumeBuilder = () => {
@@ -74,6 +76,8 @@ const ResumeBuilder = () => {
     if (isFieldSupported("experience")) list.push("Experience");
     if (isFieldSupported("projects")) list.push("Projects");
     if (isFieldSupported("skills")) list.push("Skills");
+    if (isFieldSupported("certifications")) list.push("Certifications");
+    if (isFieldSupported("achievements")) list.push("Achievements");
 
     return list;
   }, [isFieldSupported]);
@@ -122,7 +126,9 @@ const ResumeBuilder = () => {
     ],
     projects: [
       { title: "", technologies: "", description: [""] }
-    ]
+    ],
+    certifications: [""],
+    achievements: [""]
   });
 
   const [skillsList, setSkillsList] = useState<{ id: string; category: string; values: string }[]>([
@@ -172,6 +178,25 @@ const ResumeBuilder = () => {
     });
   };
 
+  const handleStringArrayChange = (sectionKey: 'certifications' | 'achievements', index: number, value: string) => {
+    setData(prev => {
+      const updatedList = [...prev[sectionKey]];
+      updatedList[index] = value;
+      return { ...prev, [sectionKey]: updatedList };
+    });
+  };
+
+  const addStringArrayItem = (sectionKey: 'certifications' | 'achievements') => {
+    setData(prev => ({ ...prev, [sectionKey]: [...prev[sectionKey], ""] }));
+  };
+
+  const removeStringArrayItem = (sectionKey: 'certifications' | 'achievements', index: number) => {
+    setData(prev => {
+      if (prev[sectionKey].length <= 1) return prev;
+      return { ...prev, [sectionKey]: prev[sectionKey].filter((_, i) => i !== index) };
+    });
+  };
+
   const addListItem = (sectionKey: 'experience' | 'projects' | 'education') => {
     const maxLimit = sectionKey === 'experience'
       ? (templateData.layoutInfo?.maxExperience ?? 3)
@@ -211,6 +236,10 @@ const ResumeBuilder = () => {
         return skillsList.length > 0 && skillsList.every(item => item.category.trim() !== "" && item.values.trim() !== "");
       case "Education":
         return data.education.every(e => e.degree.trim() !== "" && e.institution.trim() !== "" && e.duration.trim() !== "");
+      case "Certifications":
+        return data.certifications.some(c => c.trim() !== "");
+      case "Achievements":
+        return data.achievements.some(a => a.trim() !== "");
       default:
         return true;
     }
@@ -246,6 +275,8 @@ const ResumeBuilder = () => {
   const templateDataForPreview = React.useMemo(() => ({
     ...data,
     skills: formattedSkills,
+    certifications: data.certifications.filter(c => c.trim() !== ""),
+    achievements: data.achievements.filter(a => a.trim() !== ""),
     nameFontSize: `${data.nameFontSize}px`,
     headingFontSize: `${data.headingFontSize}px`,
     bodyFontSize: `${data.bodyFontSize}px`,
@@ -689,6 +720,82 @@ const ResumeBuilder = () => {
                   </svg>
                   Download PDF
                 </button>
+              </div>
+            </div>
+          )}
+
+          {/* CERTIFICATIONS */}
+          {activeTab === "Certifications" && (
+            <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
+              <SectionHeader count={data.certifications.filter(c => c.trim()).length} max={5} label="Certifications" />
+
+              {data.certifications.map((cert, i) => (
+                <div key={i} className="flex gap-2">
+                  <input
+                    className="input-field-plain flex-1"
+                    type="text"
+                    value={cert}
+                    placeholder="e.g. AWS Certified Solutions Architect"
+                    onChange={(e) => handleStringArrayChange('certifications', i, e.target.value)}
+                  />
+                  {data.certifications.length > 1 && (
+                    <button type="button" onClick={() => removeStringArrayItem('certifications', i)} className="text-red-400 hover:text-red-300 p-2" aria-label="Remove">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              <AddButton onClick={() => addStringArrayItem('certifications')} label="Add Another Certification" />
+
+              <div className="pt-4 flex justify-between items-center">
+                <button onClick={() => setActiveTab(tabs[tabIndex - 1])} className="btn-ghost text-sm px-4 py-2">← Back</button>
+                {tabIndex === tabs.length - 1 ? (
+                  <button onClick={triggerPdfDownload} className="flex items-center gap-2 px-5 py-2.5 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent)]/90 transition-all">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                    Download PDF
+                  </button>
+                ) : (
+                  <NavButtons onBack={() => setActiveTab(tabs[tabIndex - 1])} onNext={() => handleNext(tabs[tabIndex + 1])} nextLabel={tabs[tabIndex + 1]} showError={tabErrors["Certifications"]} errorMsg="Add at least one certification." />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ACHIEVEMENTS */}
+          {activeTab === "Achievements" && (
+            <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-300">
+              <SectionHeader count={data.achievements.filter(a => a.trim()).length} max={5} label="Achievements" />
+
+              {data.achievements.map((ach, i) => (
+                <div key={i} className="flex gap-2">
+                  <input
+                    className="input-field-plain flex-1"
+                    type="text"
+                    value={ach}
+                    placeholder="e.g. Won 1st place in Hackathon 2023"
+                    onChange={(e) => handleStringArrayChange('achievements', i, e.target.value)}
+                  />
+                  {data.achievements.length > 1 && (
+                    <button type="button" onClick={() => removeStringArrayItem('achievements', i)} className="text-red-400 hover:text-red-300 p-2" aria-label="Remove">
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              <AddButton onClick={() => addStringArrayItem('achievements')} label="Add Another Achievement" />
+
+              <div className="pt-4 flex justify-between items-center">
+                <button onClick={() => setActiveTab(tabs[tabIndex - 1])} className="btn-ghost text-sm px-4 py-2">← Back</button>
+                {tabIndex === tabs.length - 1 ? (
+                  <button onClick={triggerPdfDownload} className="flex items-center gap-2 px-5 py-2.5 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent)]/90 transition-all">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                    Download PDF
+                  </button>
+                ) : (
+                  <NavButtons onBack={() => setActiveTab(tabs[tabIndex - 1])} onNext={() => handleNext(tabs[tabIndex + 1])} nextLabel={tabs[tabIndex + 1]} showError={tabErrors["Achievements"]} errorMsg="Add at least one achievement." />
+                )}
               </div>
             </div>
           )}
