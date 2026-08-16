@@ -21,12 +21,12 @@ const AdminPage = () => {
 
 
   const htmlRef = useRef<HTMLInputElement>(null);
-  const [layoutInfo, setLayoutInfo] = useState({
-    maxProject: 3,
-    maxExperience: 3,
-    maxEducation: 3
-  });
-  const [HtmlfileName, setHtmlfileName] = useState<String>("No File is Selected yet")
+  // const [layoutInfo, setLayoutInfo] = useState({
+  //   maxProject: 3,
+  //   maxExperience: 3,
+  //   maxEducation: 3
+  // });
+  const [HtmlfileName, setHtmlfileName] = useState<string>("No File is Selected yet")
 
   const [supportedFields, setSupportedFields] = useState({
     summary: true,
@@ -51,7 +51,9 @@ const AdminPage = () => {
     { key: "experience", label: "Experience", desc: "Work Experience" },
     { key: "projects", label: "Projects", desc: "Projects list" },
     { key: "skills", label: "Skills", desc: "Skills categories" },
-    { key: "education", label: "Education", desc: "Education" }
+    { key: "education", label: "Education", desc: "Education" },
+    { key: "certifications", label: "Certifications", desc: "Certifications" },
+    { key: "achievements", label: "Achievements", desc: "Achievements" },
   ];
 
 
@@ -125,6 +127,8 @@ const AdminPage = () => {
           projects: true,
           skills: true,
           education: true,
+          certifications : true ,
+          achievements : true
         });
       } else {
         toast.error(data.message);

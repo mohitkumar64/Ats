@@ -90,7 +90,7 @@ const AtsModule = () => {
 
             {/* Header */}
             <div className="w-full py-16 max-w-3xl text-center space-y-4 mb-10 relative z-10">
-                <p
+                {/* <p
                     className="inline-block mb-4"
                     style={{
                         color: "var(--accent)",
@@ -103,7 +103,7 @@ const AtsModule = () => {
                 >
                     <ScanSearch className="w-3.5 h-3.5 inline-block mr-2 -mt-0.5" />
                     AI-Powered Analysis
-                </p>
+                </p> */}
                 <h1
                     className="text-4xl md:text-5xl font-extrabold tracking-tight"
                     style={{

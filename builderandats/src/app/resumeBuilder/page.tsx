@@ -85,7 +85,7 @@ const TemplateSelection = () => {
 
       {/* Hero Header */}
       <div className="relative z-10 w-full px-6 py-16 flex flex-col items-center text-center">
-        <p
+        {/* <p
           className="inline-block mb-6"
           style={{
             color: "var(--text-mono)",
@@ -98,7 +98,7 @@ const TemplateSelection = () => {
         >
           <FileText className="w-3.5 h-3.5 inline-block mr-2 -mt-0.5" />
           Professional Templates
-        </p>
+        </p> */}
         <h1
           className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4"
           style={{
