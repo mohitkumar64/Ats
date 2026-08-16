@@ -21,6 +21,12 @@ const KeywordsSchema = new mongoose.Schema({
 });
 
 const ATSResponseSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    index: true,
+  },
   score: { type: Number, required: true },
   summary: { type: String, required: true },
 

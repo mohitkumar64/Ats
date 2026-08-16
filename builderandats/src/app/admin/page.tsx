@@ -37,7 +37,9 @@ const AdminPage = () => {
     experience: true,
     projects: true,
     skills: true,
-    education: true
+    education: true,
+    certifications : true ,
+    achievements : true
   });
 
   const fieldsConfig = [

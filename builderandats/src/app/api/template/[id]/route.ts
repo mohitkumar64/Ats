@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDb } from "../../../../../Lib/conntectDb";
 import { Template } from "../../../../../Lib/Models/templates"
 import { getCurrentUser } from "../../../../../Lib/auth";
+import { getSessionUser, unauthorizedResponse } from "../../../../../Lib/apiAuth";
 
 
 
@@ -10,9 +11,13 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!getSessionUser(req)) return unauthorizedResponse();
     const { id } = await params;
     await connectDb();
     const template = await Template.findById(id);
+    if (!template) {
+      return NextResponse.json({ error: "Template not found" }, { status: 404 });
+    }
 
     return NextResponse.json(template);
   } catch (error) {

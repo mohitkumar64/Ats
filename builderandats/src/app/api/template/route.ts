@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDb } from "../../../../Lib/conntectDb";
 import { Template } from '../../../../Lib/Models/templates'
+import { getSessionUser, unauthorizedResponse } from "../../../../Lib/apiAuth";
 
 
 export async function GET(req: NextRequest) {
     try {
+        if (!getSessionUser(req)) return unauthorizedResponse();
         await connectDb();
         const templates = await Template.find();
         // console.log("templates", templates)

@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary';
 import { Template } from "../../../../Lib/Models/templates";
+import { connectDb } from "../../../../Lib/conntectDb";
+import { forbiddenResponse, getSessionUser, unauthorizedResponse } from "../../../../Lib/apiAuth";
+
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_HTML_BYTES = 512 * 1024;
+const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const SUPPORTED_FIELDS = new Set(["summary", "phoneNumber", "location", "githubLink", "linkedinLink", "experience", "projects", "skills", "education", "certifications", "achievements"]);
 
 
 cloudinary.config({
@@ -11,6 +18,10 @@ cloudinary.config({
 
 export async function POST(req: NextRequest) {
     try {
+        const user = getSessionUser(req);
+        if (!user) return unauthorizedResponse();
+        if (user.role !== "admin") return forbiddenResponse();
+        await connectDb();
 
 
         const data = await req.formData();
@@ -23,17 +34,21 @@ export async function POST(req: NextRequest) {
         let supportedFields: string[] | undefined = undefined;
         if (supportedFieldsJson) {
             try {
-                supportedFields = JSON.parse(supportedFieldsJson);
+                const parsedFields: unknown = JSON.parse(supportedFieldsJson);
+                if (!Array.isArray(parsedFields) || !parsedFields.every((field) => typeof field === "string" && SUPPORTED_FIELDS.has(field))) {
+                    return NextResponse.json({ message: "Invalid supported fields" }, { status: 400 });
+                }
+                supportedFields = parsedFields;
             } catch (e) {
                 console.error("Failed to parse supportedFields:", e);
             }
         }
 
         // validation
-        if (!img || !html || !name) {
-            console.log(img, name);
+        if (!img || !html || !name || typeof name !== "string" || name.trim().length > 100 ||
+            !IMAGE_TYPES.has(img.type) || img.size > MAX_IMAGE_BYTES || Buffer.byteLength(html, "utf8") > MAX_HTML_BYTES) {
             return NextResponse.json(
-                { message: "Missing required fields" },
+                { message: "Provide a name, valid image (PNG/JPEG/WebP up to 5 MB), and HTML under 512 KB." },
                 { status: 400 }
             );
         }
@@ -44,7 +59,7 @@ export async function POST(req: NextRequest) {
         const buffer = Buffer.from(byteArrayBuffer);
         const cloudinaryResult = await uploadResult(buffer);
 
-        const template = await Template.create({
+        await Template.create({
             name,
             html,
             img: cloudinaryResult.secure_url,

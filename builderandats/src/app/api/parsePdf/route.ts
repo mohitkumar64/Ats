@@ -3,15 +3,35 @@ import pdf from "pdf-parse/lib/pdf-parse";
 import { Ai } from "@/utils/nvim";
 import { ATSResponse } from "../../../../Lib/Models/parseSchema";
 import { connectDb } from "../../../../Lib/conntectDb";
+import { getSessionUser, unauthorizedResponse } from "../../../../Lib/apiAuth";
+
+const MAX_PDF_BYTES = 5 * 1024 * 1024;
 
 export async function POST(req: NextRequest) {
   try {
+    const user = getSessionUser(req);
+    if (!user) return unauthorizedResponse();
+
+    const contentType = req.headers.get("content-type") || "";
+    const contentLength = Number(req.headers.get("content-length") || 0);
+    if (!contentType.includes("application/pdf") || contentLength > MAX_PDF_BYTES) {
+      return NextResponse.json({ error: "Upload a PDF smaller than 5 MB." }, { status: 400 });
+    }
+
     await connectDb();
     const buffer = Buffer.from(await req.arrayBuffer());
+    if (buffer.length === 0 || buffer.length > MAX_PDF_BYTES) {
+      return NextResponse.json({ error: "Upload a PDF smaller than 5 MB." }, { status: 400 });
+    }
     const data = await pdf(buffer);
+    if (!data.text.trim()) {
+      return NextResponse.json({ error: "The PDF contains no readable text." }, { status: 400 });
+    }
     // console.log("Extracted PDF text:", data.text);
     const aiResponse = await Ai(data.text)
-    console.log("Ai response recieved")
+    if (typeof aiResponse !== "string") {
+      throw new Error("AI analysis failed");
+    }
     // console.log(aiResponse);
     const clean = aiResponse
       .replace(/```json/g, "")
@@ -20,6 +40,7 @@ export async function POST(req: NextRequest) {
     const parsed = JSON.parse(clean);
 
     const res = await ATSResponse.create({
+      userId: user.id,
       score: parsed.score,
       summary: parsed.summary,
       sections: parsed.sections,

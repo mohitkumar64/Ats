@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDb } from "../../../../Lib/conntectDb";
 import { UserData } from "../../../../Lib/Models/userData";
-import jwt from "jsonwebtoken";
+import { getSessionUser, unauthorizedResponse } from "../../../../Lib/apiAuth";
+
+const PROFILE_FIELDS = new Set([
+    "name", "phone", "bio", "professionalTitle", "location", "profileImage",
+    "portfolioWebsite", "githubUrl", "linkedinUrl", "twitterUrl", "education",
+    "skills", "experience", "certifications", "achievements", "research",
+]);
 
 export async function GET(req: NextRequest) {
     try {
         await connectDb();
-        const token = req.cookies.get("token")?.value;
-        if (!token) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
-        const userData = await UserData.findOne({ userId: decoded.id });
+        const user = getSessionUser(req);
+        if (!user) return unauthorizedResponse();
+        const userData = await UserData.findOne({ userId: user.id });
 
         if (!userData) {
             return NextResponse.json({ error: "User profile not found" }, { status: 404 });
@@ -28,18 +30,23 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     try {
         await connectDb();
-        const token = req.cookies.get("token")?.value;
-        if (!token) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        const user = getSessionUser(req);
+        if (!user) return unauthorizedResponse();
+        const body: unknown = await req.json();
+        if (!body || typeof body !== "object" || Array.isArray(body)) {
+            return NextResponse.json({ error: "Invalid profile data" }, { status: 400 });
         }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
-        const body = await req.json();
+        const update = Object.fromEntries(
+            Object.entries(body).filter(([field]) => PROFILE_FIELDS.has(field))
+        );
+        if (Object.keys(update).length === 0) {
+            return NextResponse.json({ error: "No editable fields provided" }, { status: 400 });
+        }
 
         // Update UserData associated with the token's userId
         const updatedData = await UserData.findOneAndUpdate(
-            { userId: decoded.id },
-            { $set: body },
+            { userId: user.id },
+            { $set: update },
             { new: true, runValidators: true }
         );
 

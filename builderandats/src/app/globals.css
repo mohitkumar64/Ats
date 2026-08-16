@@ -796,7 +796,7 @@ body {
   display: flex;
   flex: 1;
   max-width: 1280px;
-  padding: 0 4rem;
+
 }
 
 .container-tight {
@@ -822,10 +822,10 @@ body {
 
 }
 
-@media (min-width: 300px) {
-  .container-hero {
+@media (max-width: 360px) {
+  /* .container-hero {
     padding: 0 1.5rem;
-  }
+  } */
 }
 
 /* ── Divider with label ── */
