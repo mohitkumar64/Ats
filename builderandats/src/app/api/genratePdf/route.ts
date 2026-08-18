@@ -1,15 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium-min";
+import puppeteer from "puppeteer-core";
 import { existsSync } from "node:fs";
 import { getSessionUser, unauthorizedResponse } from "../../../../Lib/apiAuth";
 
-const MAX_HTML_BYTES = 512 * 1024;
+export const runtime = "nodejs";
+export const maxDuration = 60;
 
-async function resolveBrowserExecutablePath() {
+const MAX_HTML_BYTES = 512 * 1024;
+const DEFAULT_CHROMIUM_PACK_URL =
+  "https://github.com/Sparticuz/chromium/releases/download/v149.0.0/chromium-v149.0.0-pack.x64.tar";
+const DEFAULT_VIEWPORT = {
+  deviceScaleFactor: 1,
+  hasTouch: false,
+  height: 1080,
+  isLandscape: true,
+  isMobile: false,
+  width: 1920,
+};
+
+async function resolveLocalBrowserExecutablePath() {
   const envPath = process.env.PUPPETEER_EXECUTABLE_PATH;
-  if (envPath && existsSync(envPath)) {
-    return envPath;
-  }
+  if (envPath && existsSync(envPath)) return envPath;
 
   if (process.platform === "win32") {
     const windowsCandidates = [
@@ -19,26 +31,44 @@ async function resolveBrowserExecutablePath() {
       "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
     ];
 
-    for (const candidate of windowsCandidates) {
-      if (existsSync(candidate)) {
-        return candidate;
-      }
-    }
-  }
-
-  try {
-    const bundledPath = await puppeteer.executablePath();
-    if (bundledPath && existsSync(bundledPath)) {
-      return bundledPath;
-    }
-  } catch {
-    // Fall through to Puppeteer's default resolution if no executable was found.
+    return windowsCandidates.find(existsSync);
   }
 
   return undefined;
 }
 
-export  async function POST(req : NextRequest ){
+async function launchBrowser() {
+  if (process.env.VERCEL) {
+    const executablePath = await chromium.executablePath(
+      process.env.CHROMIUM_PACK_URL ?? DEFAULT_CHROMIUM_PACK_URL,
+    );
+
+    return puppeteer.launch({
+      args: await puppeteer.defaultArgs({
+        args: chromium.args,
+        headless: "shell",
+      }),
+      defaultViewport: DEFAULT_VIEWPORT,
+      executablePath,
+      headless: "shell",
+    });
+  }
+
+  const executablePath = await resolveLocalBrowserExecutablePath();
+  if (!executablePath) {
+    throw new Error(
+      "No local Chrome or Edge installation was found. Set PUPPETEER_EXECUTABLE_PATH to its executable path.",
+    );
+  }
+
+  return puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    executablePath,
+    headless: true,
+  });
+}
+
+export async function POST(req: NextRequest) {
   if (!getSessionUser(req)) return unauthorizedResponse();
 
   let browser: Awaited<ReturnType<typeof puppeteer.launch>> | undefined;
@@ -48,31 +78,32 @@ export  async function POST(req : NextRequest ){
       return NextResponse.json({ error: "HTML must be smaller than 512 KB." }, { status: 400 });
     }
 
-    browser = await puppeteer.launch({
-      executablePath: await resolveBrowserExecutablePath(),
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    browser = await launchBrowser();
     const page = await browser.newPage();
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);
     page.on("request", (request) => request.abort());
 
-    await page.setContent(html , {
-        waitUntil: "domcontentloaded",
-        timeout: 15_000,
-    })
+    await page.setContent(html, {
+      waitUntil: "domcontentloaded",
+      timeout: 15_000,
+    });
+
     const pdf = await page.pdf({
-        format : "A4" , 
-        printBackground : true
-    })
-    return new NextResponse(Buffer.from(pdf) , {
-        headers : {
-            "content-type" : "application/pdf" ,
-            "content-disposition" : "attachment; filename=generated.pdf"
-        }
-    })
+      format: "A4",
+      printBackground: true,
+    });
+
+    return new NextResponse(Buffer.from(pdf), {
+      headers: {
+        "content-type": "application/pdf",
+        "content-disposition": "attachment; filename=generated.pdf",
+      },
+    });
   } catch (error) {
-    console.error("PDF generation failed", error);
+    console.error("PDF generation failed", {
+      message: error instanceof Error ? error.message : String(error),
+    });
     return NextResponse.json({ error: "Failed to generate PDF" }, { status: 500 });
   } finally {
     await browser?.close();
