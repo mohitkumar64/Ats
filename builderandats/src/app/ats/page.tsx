@@ -67,7 +67,7 @@ const AtsModule = () => {
                 const res = await req.json();
                 router.push(`/ats/${res.id}`)
             } else {
-                setError("Failed to parse the PDF. Please try again.");
+                setError("api limit reached . Please try again later.");
             }
         } catch (err) {
             console.error("Upload error:", err);

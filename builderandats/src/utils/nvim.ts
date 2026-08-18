@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { readFile } from 'node:fs/promises';
 
 const invokeUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
 const stream = false;
@@ -9,15 +8,13 @@ const headers = {
   "Accept": stream ? "text/event-stream" : "application/json"
 };
 
-export async function Ai(text : string){
-if (!process.env.GEMINI_API_KEY) {
-  console.error("GEMINI_API_KEY is not set in environment variables.");
-  return { error: "API key not configured" };
-}
-const payload = {
-  "model": "meta/llama-4-maverick-17b-128e-instruct",
-  "messages": [{role: "You are an advanced ATS (Applicant Tracking System) evaluator.", content: `
+export async function Ai(text: string) {
+  if (!process.env.GEMINI_API_KEY) {
+    console.error("GEMINI_API_KEY is not set in environment variables.");
+    return { error: "API key not configured" };
+  }
 
+  const instructions = `
 INPUT:
 1. Resume text (raw string)
 2. Optional Job Description (raw string, may be null)
@@ -81,7 +78,6 @@ OUTPUT FORMAT (STRICT JSON ONLY):
 {
   "score": number,
   "summary": "short overall evaluation",
-
   "sections": {
     "basic_info": {
       "score": number,
@@ -129,47 +125,47 @@ CONSTRAINTS:
 - Keep responses concise but informative
 - Always return valid JSON without any extra commentary
 - dont give \n in response give back content in proper jason which can be parsed by JSON.parse() without errors
+`.trim();
+  const payload = {
+    model: "nvidia/nemotron-3-ultra-550b-a55b",
+    messages: [
+      { role: "system", content: instructions },
+      { role: "user", content: text },
+    ],
+    chat_template_kwargs: { enable_thinking: false },
+    max_tokens: 3800,
+    temperature: 0,
+    top_p: 1,
+    stream: false,
+  };
 
-   content : ${text}
-    
+  try {
+    const response = await axios.post(invokeUrl, payload, { headers });
+    console.log("Response received:");
+    console.log(response.data.choices[0].message);
+    return (response.data.choices[0].message.content);
+  } catch (error) {
+    console.error("error ins nvim.ts");
+    return { error: "Failed to get response from AI" };
+  }
 
-    
-    `}],
-  "max_tokens": 512,
-  "temperature": 1.00,
-  "top_p": 1.00,
-  "frequency_penalty": 0.00,
-  "presence_penalty": 0.00,
-  "stream": stream
-};
+  // Promise.resolve( 
 
-try {
-  const response = await axios.post(invokeUrl, payload, { headers});
-  console.log("Response received:");
-  console.log(response.data);
-   return(response.data.choices[0].message.content);
-} catch (error) {
-  console.error(error);
-  return{error: "Failed to get response from AI"};
-}
+  // )
 
-// Promise.resolve(
+  //   .then(response => {
+  //     if (stream) {
+  //       response.data.on('data', (chunk) => {
+  //         console.log(chunk.choices[0].message.toString());
+  //         return chunk.choices[0].message.toString();
+  //       });
+  //     } else {
+  //       console.log("Response received:");
 
-// )
+  //      return(response.data.choices[0].message.content);
+  //     }
+  //   })
+  //   .catch(error => {
 
-//   .then(response => {
-//     if (stream) {
-//       response.data.on('data', (chunk) => {
-//         console.log(chunk.choices[0].message.toString());
-//         return chunk.choices[0].message.toString();
-//       });
-//     } else {
-//       console.log("Response received:");
-     
-//      return(response.data.choices[0].message.content);
-//     }
-//   })
-//   .catch(error => {
-    
-//   });
+  //   });
 }

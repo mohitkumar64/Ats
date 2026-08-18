@@ -1,8 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer";
+import { existsSync } from "node:fs";
 import { getSessionUser, unauthorizedResponse } from "../../../../Lib/apiAuth";
 
 const MAX_HTML_BYTES = 512 * 1024;
+
+async function resolveBrowserExecutablePath() {
+  const envPath = process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (envPath && existsSync(envPath)) {
+    return envPath;
+  }
+
+  if (process.platform === "win32") {
+    const windowsCandidates = [
+      "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+      "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+      "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    ];
+
+    for (const candidate of windowsCandidates) {
+      if (existsSync(candidate)) {
+        return candidate;
+      }
+    }
+  }
+
+  try {
+    const bundledPath = await puppeteer.executablePath();
+    if (bundledPath && existsSync(bundledPath)) {
+      return bundledPath;
+    }
+  } catch {
+    // Fall through to Puppeteer's default resolution if no executable was found.
+  }
+
+  return undefined;
+}
 
 export  async function POST(req : NextRequest ){
   if (!getSessionUser(req)) return unauthorizedResponse();
@@ -14,7 +48,10 @@ export  async function POST(req : NextRequest ){
       return NextResponse.json({ error: "HTML must be smaller than 512 KB." }, { status: 400 });
     }
 
-    browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
+    browser = await puppeteer.launch({
+      executablePath: await resolveBrowserExecutablePath(),
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     await page.setJavaScriptEnabled(false);
     await page.setRequestInterception(true);

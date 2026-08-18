@@ -27,16 +27,21 @@ export async function POST(req: NextRequest) {
     if (!data.text.trim()) {
       return NextResponse.json({ error: "The PDF contains no readable text." }, { status: 400 });
     }
-    // console.log("Extracted PDF text:", data.text);
+
     const aiResponse = await Ai(data.text)
     if (typeof aiResponse !== "string") {
       throw new Error("AI analysis failed");
     }
-    // console.log(aiResponse);
-    const clean = aiResponse
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
+
+    // const clean = aiResponse
+    //   .replace(/```json/g, "")
+    //   .replace(/```/g, "")
+    //   .trim();
+    const clean = aiResponse.trim()
+      .replace(/^```json\s*/i, "")
+      .replace(/\s*```$/, "");
+
+    // console.log(clean)
     const parsed = JSON.parse(clean);
 
     const res = await ATSResponse.create({
@@ -47,7 +52,6 @@ export async function POST(req: NextRequest) {
     });
 
 
-    // console.log(res.id)
     return NextResponse.json({ id: res.id });
   } catch (err) {
     console.error("Error in parsePdf:", err);
